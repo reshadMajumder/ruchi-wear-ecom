@@ -1,0 +1,6 @@
+.env
+*.pem
+ssl/*.pem
+**/.env
+**/.env.*
+admin/next-env.d.ts

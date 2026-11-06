@@ -1,0 +1,136 @@
+{
+  "placeholderImages": [
+    {
+      "id": "hero-main",
+      "description": "Main promotional banner for electronics",
+      "imageUrl": "https://picsum.photos/seed/101/1200/600",
+      "imageHint": "electronics gadget banner"
+    },
+    {
+      "id": "hero-side-1",
+      "description": "Side banner for fashion deals",
+      "imageUrl": "https://picsum.photos/seed/102/400/290",
+      "imageHint": "fashion discount banner"
+    },
+    {
+      "id": "hero-side-2",
+      "description": "Side banner for home appliances",
+      "imageUrl": "https://picsum.photos/seed/103/400/290",
+      "imageHint": "home appliance offer"
+    },
+    {
+      "id": "cat-electronics",
+      "description": "Category icon for electronics",
+      "imageUrl": "https://picsum.photos/seed/11/150/150",
+      "imageHint": "laptop computer"
+    },
+    {
+      "id": "cat-fashion",
+      "description": "Category icon for fashion",
+      "imageUrl": "https://picsum.photos/seed/12/150/150",
+      "imageHint": "clothing style"
+    },
+    {
+      "id": "cat-home",
+      "description": "Category icon for home",
+      "imageUrl": "https://picsum.photos/seed/13/150/150",
+      "imageHint": "home decor"
+    },
+    {
+      "id": "cat-beauty",
+      "description": "Category icon for beauty",
+      "imageUrl": "https://picsum.photos/seed/14/150/150",
+      "imageHint": "beauty cosmetics"
+    },
+    {
+      "id": "cat-sports",
+      "description": "Category icon for sports",
+      "imageUrl": "https://picsum.photos/seed/15/150/150",
+      "imageHint": "sports equipment"
+    },
+    {
+      "id": "cat-toys",
+      "description": "Category icon for toys",
+      "imageUrl": "https://picsum.photos/seed/16/150/150",
+      "imageHint": "children toys"
+    },
+    {
+      "id": "cat-grocery",
+      "description": "Category icon for grocery",
+      "imageUrl": "https://picsum.photos/seed/17/150/150",
+      "imageHint": "fresh grocery"
+    },
+    {
+      "id": "prod-1",
+      "description": "Product image for smartphone",
+      "imageUrl": "https://picsum.photos/seed/21/400/400",
+      "imageHint": "smartphone mobile"
+    },
+    {
+      "id": "prod-2",
+      "description": "Product image for wireless headphones",
+      "imageUrl": "https://picsum.photos/seed/22/400/400",
+      "imageHint": "wireless headphones"
+    },
+    {
+      "id": "prod-3",
+      "description": "Product image for smartwatch",
+      "imageUrl": "https://picsum.photos/seed/23/400/400",
+      "imageHint": "smartwatch digital"
+    },
+    {
+      "id": "prod-4",
+      "description": "Product image for bluetooth speaker",
+      "imageUrl": "https://picsum.photos/seed/24/400/400",
+      "imageHint": "bluetooth speaker"
+    },
+    {
+      "id": "prod-5",
+      "description": "Product image for gaming mouse",
+      "imageUrl": "https://picsum.photos/seed/25/400/400",
+      "imageHint": "gaming mouse"
+    },
+    {
+      "id": "prod-6",
+      "description": "Product image for laptop stand",
+      "imageUrl": "https://picsum.photos/seed/26/400/400",
+      "imageHint": "laptop stand"
+    },
+    {
+      "id": "prod-7",
+      "description": "Product image for mechanical keyboard",
+      "imageUrl": "https://picsum.photos/seed/27/400/400",
+      "imageHint": "mechanical keyboard"
+    },
+    {
+      "id": "prod-8",
+      "description": "Product image for tablet",
+      "imageUrl": "https://picsum.photos/seed/28/400/400",
+      "imageHint": "tablet computer"
+    },
+    {
+      "id": "promo-modal",
+      "description": "Grand Eid Fest Promotion Modal",
+      "imageUrl": "https://picsum.photos/seed/300/800/600",
+      "imageHint": "eid festival sale"
+    },
+    {
+      "id": "middle-banner",
+      "description": "Smartphone Day Category Banner",
+      "imageUrl": "https://cdn.othoba.com/images/thumbs/1988766_Smart%20Phone%20DayCat%20Banner%20Web_11Mar26aas.jpeg",
+      "imageHint": "smartphone day banner"
+    },
+    {
+      "id": "hot-deal-1",
+      "description": "Mosquito Bat",
+      "imageUrl": "https://picsum.photos/seed/bat-deal/400/400",
+      "imageHint": "mosquito bat"
+    },
+    {
+      "id": "hot-deal-2",
+      "description": "Surf Excel Liquid",
+      "imageUrl": "https://picsum.photos/seed/surf-deal/400/400",
+      "imageHint": "laundry detergent"
+    }
+  ]
+}

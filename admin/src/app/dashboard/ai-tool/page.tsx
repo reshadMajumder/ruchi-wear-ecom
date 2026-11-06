@@ -1,0 +1,1 @@
+export default function RemovedPage() { return <div>This tool has been removed.</div>; }

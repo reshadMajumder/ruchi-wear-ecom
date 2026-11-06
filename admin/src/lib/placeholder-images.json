@@ -1,0 +1,34 @@
+{
+  "placeholderImages": [
+    {
+      "id": "product-headphones",
+      "description": "Premium Wireless Headphones",
+      "imageUrl": "https://picsum.photos/seed/headphones/300/300",
+      "imageHint": "wireless headphones"
+    },
+    {
+      "id": "product-backpack",
+      "description": "Leather Travel Backpack",
+      "imageUrl": "https://picsum.photos/seed/backpack/300/300",
+      "imageHint": "leather backpack"
+    },
+    {
+      "id": "product-chair",
+      "description": "Ergonomic Desk Chair",
+      "imageUrl": "https://picsum.photos/seed/chair/300/300",
+      "imageHint": "office chair"
+    },
+    {
+      "id": "product-clock",
+      "description": "Minimalist Wall Clock",
+      "imageUrl": "https://picsum.photos/seed/clock/300/300",
+      "imageHint": "wall clock"
+    },
+    {
+      "id": "product-bottle",
+      "description": "Stainless Steel Water Bottle",
+      "imageUrl": "https://picsum.photos/seed/bottle/300/300",
+      "imageHint": "water bottle"
+    }
+  ]
+}

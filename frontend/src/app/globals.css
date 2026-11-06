@@ -1,0 +1,68 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 210 60% 45%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 14% 92%;
+    --secondary-foreground: 210 60% 45%;
+    --muted: 210 14% 92%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 15 90% 55%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 210 60% 45%;
+    --radius: 0.1rem; /* Sharp edges as requested */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+}
+
+.category-circle {
+  @apply flex flex-col items-center gap-2 transition-transform hover:scale-105 cursor-pointer;
+}
+
+.product-card {
+  @apply bg-card rounded-none overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-transparent hover:border-primary/20;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
