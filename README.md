@@ -1,6 +1,6 @@
-# Adurys Gallery
+# Ruchi Wear
 
-Adurys Gallery is a Django REST backend with Redis caching plus two Next.js applications for the storefront and admin panel. The production stack is Dockerized and designed to run behind Nginx with Cloudflare Origin SSL.
+Ruchi Wear is a Django REST backend with Redis caching plus two Next.js applications for the storefront and admin panel. The production stack is Dockerized and designed to run behind Nginx with Cloudflare Origin SSL.
 
 ## Production Topology
 

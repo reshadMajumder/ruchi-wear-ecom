@@ -1,4 +1,4 @@
-const VISITOR_ID_KEY = 'adurys_visitor_id';
+const VISITOR_ID_KEY = 'ruchiwear_visitor_id';
 const TRACKING_ENDPOINT = '/api/stats/track/';
 
 class Tracker {

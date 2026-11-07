@@ -4,8 +4,8 @@ import { AuthProvider } from '@/lib/auth-context';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'CommerceHub Admin',
-  description: 'Professional E-commerce Administrative Interface',
+  title: 'Ruchi Wear Admin',
+  description: 'Ruchi Wear store administration',
 };
 
 export default function RootLayout({

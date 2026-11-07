@@ -28,7 +28,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    const savedCart = localStorage.getItem('adurys_cart');
+    const savedCart = localStorage.getItem('ruchiwear_cart');
     if (savedCart) {
       try {
         setItems(JSON.parse(savedCart));
@@ -39,7 +39,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('adurys_cart', JSON.stringify(items));
+    localStorage.setItem('ruchiwear_cart', JSON.stringify(items));
   }, [items]);
 
   const addToCart = (newItem: CartItem) => {

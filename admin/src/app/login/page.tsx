@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { ShoppingBag, Lock, User, RefreshCw } from 'lucide-react';
+import { Lock, User, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
@@ -28,7 +28,7 @@ export default function LoginPage() {
       if (success) {
         toast({
           title: 'Welcome Back',
-          description: 'Successfully authenticated to CommerceHub.',
+          description: 'Signed in to Ruchi Wear.',
         });
         router.push('/dashboard');
       } else {
@@ -52,12 +52,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-md">
-        <div className="flex flex-col items-center mb-8 gap-2">
-          <div className="p-3 bg-primary rounded-xl shadow-lg">
-            <ShoppingBag className="w-8 h-8 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-foreground">AdurysGallery</h1>
-          <p className="text-muted-foreground">Admin Portal Authentication</p>
+        <div className="flex flex-col items-center mb-8 gap-3">
+          <img src="/brand/logo-black.png" alt="Ruchi Wear" className="h-28 w-auto" />
+          <p className="text-muted-foreground">Admin portal</p>
         </div>
         
         <Card className="border-none shadow-2xl">
@@ -117,7 +114,7 @@ export default function LoginPage() {
         </Card>
         
         <p className="mt-8 text-center text-xs text-muted-foreground">
-          &copy; 2024 Adurys Gallery Systems Inc. All rights reserved.
+          &copy; 2026 Ruchi Wear. All rights reserved.
         </p>
       </div>
     </div>

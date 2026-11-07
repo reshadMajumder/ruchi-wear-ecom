@@ -13,18 +13,13 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { 
-  ChevronRight, 
   Loader2, 
   CheckCircle2, 
-  ShieldCheck, 
   MapPin, 
   Phone, 
   User, 
   ShoppingBag,
-  BadgePercent,
-  ReceiptText,
   Printer,
-  ArrowRight
 } from 'lucide-react';
 import { BASE_URL } from '@/lib/constants';
 import { useToast } from '@/hooks/use-toast';
@@ -193,10 +188,10 @@ export default function CheckoutPage() {
     if (items.length === 0) return;
     
     if (!formData.customer_name || !formData.customer_phone || !formData.division || !formData.city || !formData.detailed_address) {
-      toast({ 
-        variant: "destructive", 
-        title: "Information Required", 
-        description: "Please fill in all mandatory fields marked with an asterisk (*)." 
+      toast({
+        variant: "destructive",
+        title: "Missing details",
+        description: "Add your name, phone, and delivery address.",
       });
       return;
     }
@@ -262,9 +257,17 @@ export default function CheckoutPage() {
     window.print();
   };
 
+  const subtotal = calculation ? parseFloat(calculation.discounted_subtotal) : totalPrice;
+  const couponOff = calculation ? parseFloat(calculation.coupon_discount_amount) : 0;
+  const taxTotal = calculation ? parseFloat(calculation.vat_amount) + parseFloat(calculation.tax_amount) : 0;
+  const delivery = calculation
+    ? parseFloat(calculation.delivery_charge)
+    : formData.is_inside_dhaka ? 60 : 120;
+  const payable = calculation ? parseFloat(calculation.total_amount) : totalPrice + delivery;
+
   if (!mounted) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#f5f5f5]">
+      <div className="min-h-screen flex flex-col bg-white">
         <Header />
         <main className="flex-grow flex items-center justify-center">
           <Loader2 className="w-10 h-10 animate-spin text-primary" />
@@ -275,15 +278,13 @@ export default function CheckoutPage() {
   }
 
   if (orderStatement) return (
-    <div className="min-h-screen flex flex-col bg-[#f5f5f5] print:bg-white">
+    <div className="min-h-screen flex flex-col bg-white print:bg-white">
       <div className="print:hidden"><Header /></div>
       <main className="flex-grow container mx-auto px-4 lg:px-12 xl:px-24 py-12 flex flex-col items-center">
-        <div className="text-center mb-10 print:hidden">
-          <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-100">
-            <CheckCircle2 className="w-8 h-8 text-green-600" />
-          </div>
-          <h1 className="text-3xl font-black text-gray-900 uppercase tracking-tight">Order Confirmed!</h1>
-          <p className="text-gray-500 mt-2">Thank you for shopping with Adurys.com</p>
+        <div className="mb-6 text-center print:hidden">
+          <CheckCircle2 className="mx-auto mb-2 h-8 w-8 text-gray-900" />
+          <h1 className="text-2xl font-semibold">Order placed</h1>
+          <p className="mt-1 text-sm text-gray-500">{orderStatement.public_order_id}</p>
         </div>
 
         <div 
@@ -292,8 +293,8 @@ export default function CheckoutPage() {
         >
           <div className="flex flex-col md:flex-row justify-between items-start gap-6 border-b pb-8 mb-8">
             <div>
-              <h2 className="text-2xl font-black italic text-primary mb-1">Adurys.com</h2>
-              <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">Premium Shopping Destination</p>
+              <img src="/brand/logo-black.png" alt="Ruchi Wear" className="h-16 w-auto mb-1" />
+              <p className="text-xs text-gray-400 font-bold uppercase tracking-widest">Reflection of Taste</p>
               <div className="mt-4 space-y-1">
                 <p className="text-[11px] font-black text-gray-400 uppercase tracking-tighter">Order Date</p>
                 <p className="text-sm font-bold text-gray-900">
@@ -373,28 +374,28 @@ export default function CheckoutPage() {
           </div>
 
           <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100 space-y-3">
-            <div className="flex justify-between text-xs">
-              <span className="text-gray-500 font-medium">Subtotal</span>
-              <span className="font-bold text-gray-900">Tk {parseFloat(orderStatement.total_amount_before_discount).toLocaleString()}</span>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-500">Subtotal</span>
+              <span>Tk {orderStatement.items.reduce((sum, item) => sum + parseFloat(item.line_total), 0).toLocaleString()}</span>
             </div>
-            
+
             {parseFloat(orderStatement.coupon_discount_amount) > 0 && (
-              <div className="flex justify-between text-xs text-green-600 font-bold">
-                <span className="flex items-center gap-1.5">
-                  <BadgePercent className="w-3.5 h-3.5" /> Coupon Discount ({orderStatement.coupon_code})
-                </span>
-                <span>- Tk {parseFloat(orderStatement.coupon_discount_amount).toLocaleString()}</span>
+              <div className="flex justify-between text-sm">
+                <span>Coupon {orderStatement.coupon_code}</span>
+                <span>− Tk {parseFloat(orderStatement.coupon_discount_amount).toLocaleString()}</span>
               </div>
             )}
 
-            <div className="flex justify-between text-xs">
-              <span className="text-gray-500 font-medium">VAT & Tax Amount</span>
-              <span className="font-bold text-gray-900">Tk {(parseFloat(orderStatement.vat_amount) + parseFloat(orderStatement.tax_amount)).toLocaleString()}</span>
-            </div>
+            {(parseFloat(orderStatement.vat_amount) + parseFloat(orderStatement.tax_amount)) > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-500">Tax</span>
+                <span>Tk {(parseFloat(orderStatement.vat_amount) + parseFloat(orderStatement.tax_amount)).toLocaleString()}</span>
+              </div>
+            )}
 
-            <div className="flex justify-between text-xs">
-              <span className="text-gray-500 font-medium">Delivery Charge</span>
-              <span className="font-bold text-gray-900">Tk {parseFloat(orderStatement.delivery_charge).toLocaleString()}</span>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-500">Delivery</span>
+              <span>Tk {parseFloat(orderStatement.delivery_charge).toLocaleString()}</span>
             </div>
 
             <Separator className="my-2" />
@@ -405,23 +406,15 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          <div className="mt-8 pt-8 border-t border-dashed border-gray-200 text-center">
-            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-2">Authentic Products • Fast Delivery • 7 Days Return</p>
-            <p className="text-[10px] text-gray-300">This is a system-generated invoice. No signature is required.</p>
-          </div>
+          <p className="mt-6 border-t pt-4 text-center text-xs text-gray-400">Pay cash when the order arrives.</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 mt-10 print:hidden w-full max-w-3xl">
-          <Button 
-            onClick={handlePrint}
-            className="flex-grow h-14 rounded-xl font-black uppercase tracking-wider bg-white border-2 border-primary text-primary hover:bg-primary/5 transition-all"
-          >
-            <Printer className="w-5 h-5 mr-2" /> Print / Save as PDF
+          <Button onClick={handlePrint} variant="outline" className="h-11 flex-1 rounded-md">
+            <Printer className="mr-2 h-4 w-4" /> Print
           </Button>
-          <Link href="/" className="flex-grow">
-            <Button className="w-full h-14 rounded-xl font-black uppercase tracking-wider shadow-xl shadow-primary/20">
-              Continue Shopping
-            </Button>
+          <Link href="/" className="flex-1">
+            <Button className="h-11 w-full rounded-md">Keep shopping</Button>
           </Link>
         </div>
       </main>
@@ -430,301 +423,198 @@ export default function CheckoutPage() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f5f5f5]">
+    <div className="min-h-screen flex flex-col bg-white">
       <Header />
       <main className="flex-grow container mx-auto px-4 lg:px-12 xl:px-24 py-8">
-        <nav className="flex items-center gap-2 text-[13px] text-gray-500 mb-8">
-          <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-          <ChevronRight className="w-3 h-3" />
-          <Link href="/cart" className="hover:text-primary transition-colors">Shopping Bag</Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-gray-900 font-medium">Checkout</span>
-        </nav>
+        <h1 className="mb-4 text-xl font-semibold">Checkout</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-7 space-y-6">
-            <form onSubmit={handleSubmitOrder} className="bg-white rounded-2xl border shadow-sm overflow-hidden">
-              <div className="p-6 border-b bg-gray-50/50">
-                <h3 className="text-lg font-black flex items-center gap-2 text-gray-900 uppercase tracking-tight">
-                  <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  Secure Delivery Details
-                </h3>
-              </div>
-              
-              <div className="p-8 space-y-8">
-                <div className="space-y-6">
-                  <h4 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                    <User className="w-4 h-4" />
-                    Personal Information
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label className="text-[11px] font-black uppercase tracking-tight text-gray-700">Full Name *</Label>
-                      <Input 
-                        name="customer_name" 
-                        required 
-                        placeholder="e.g. John Doe"
-                        className="h-12 bg-gray-50/30 rounded-xl"
-                        value={formData.customer_name} 
-                        onChange={handleInputChange}
-                        suppressHydrationWarning
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-[11px] font-black uppercase tracking-tight text-gray-700">Phone Number *</Label>
-                      <Input 
-                        name="customer_phone" 
-                        required 
-                        placeholder="01XXXXXXXXX"
-                        className="h-12 bg-gray-50/30 rounded-xl"
-                        value={formData.customer_phone} 
-                        onChange={handleInputChange}
-                        suppressHydrationWarning
-                      />
-                    </div>
-                  </div>
+        <div className="grid items-start gap-8 pb-20 lg:grid-cols-12 lg:pb-0">
+          <div className="lg:col-span-7">
+            <form id="checkout-form" onSubmit={handleSubmitOrder} className="space-y-4">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="customer_name" className="text-sm">Name</Label>
+                  <Input
+                    id="customer_name"
+                    name="customer_name"
+                    required
+                    autoComplete="name"
+                    placeholder="Your name"
+                    className="h-11"
+                    value={formData.customer_name}
+                    onChange={handleInputChange}
+                  />
                 </div>
-
-                <Separator className="opacity-50" />
-
-                <div className="space-y-6">
-                  <h4 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    Delivery Location
-                  </h4>
-                  
-                  <RadioGroup 
-                    defaultValue="inside" 
-                    className="grid grid-cols-2 gap-4"
-                    onValueChange={handleLocationChange}
-                  >
-                    <div className={cn(
-                      "flex items-center space-x-2 border-2 rounded-2xl p-4 cursor-pointer transition-all",
-                      formData.is_inside_dhaka ? "border-primary bg-primary/5 shadow-sm" : "border-gray-100 hover:border-gray-200"
-                    )}>
-                      <RadioGroupItem value="inside" id="inside" />
-                      <Label htmlFor="inside" className="font-bold cursor-pointer text-sm">Inside Dhaka</Label>
-                    </div>
-                    <div className={cn(
-                      "flex items-center space-x-2 border-2 rounded-2xl p-4 cursor-pointer transition-all",
-                      !formData.is_inside_dhaka ? "border-primary bg-primary/5 shadow-sm" : "border-gray-100 hover:border-gray-200"
-                    )}>
-                      <RadioGroupItem value="outside" id="outside" />
-                      <Label htmlFor="outside" className="font-bold cursor-pointer text-sm">Outside Dhaka</Label>
-                    </div>
-                  </RadioGroup>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label className="text-[11px] font-black uppercase tracking-tight text-gray-700">Division *</Label>
-                      <Input 
-                        name="division" 
-                        required 
-                        placeholder="e.g. Dhaka"
-                        className="h-12 bg-gray-50/30 rounded-xl"
-                        value={formData.division} 
-                        onChange={handleInputChange}
-                        suppressHydrationWarning
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-[11px] font-black uppercase tracking-tight text-gray-700">City *</Label>
-                      <Input 
-                        name="city" 
-                        required 
-                        placeholder="e.g. Mirpur"
-                        className="h-12 bg-gray-50/30 rounded-xl"
-                        value={formData.city} 
-                        onChange={handleInputChange}
-                        suppressHydrationWarning
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-[11px] font-black uppercase tracking-tight text-gray-700">Detailed Address *</Label>
-                    <Input 
-                      name="detailed_address" 
-                      required 
-                      placeholder="House, Street, Area"
-                      className="h-12 bg-gray-50/30 rounded-xl"
-                      value={formData.detailed_address} 
-                      onChange={handleInputChange}
-                      suppressHydrationWarning
-                    />
-                  </div>
-                </div>
-
-                <Separator className="opacity-50" />
-
-                <div className="space-y-6">
-                  <h4 className="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                    <ReceiptText className="w-4 h-4" />
-                    Payment Method
-                  </h4>
-                  <div className="p-5 rounded-2xl border-2 border-primary/20 bg-primary/5 flex items-center justify-between group">
-                    <div className="flex items-center gap-4">
-                      <div className="w-5 h-5 rounded-full border-4 border-primary bg-white shadow-inner" />
-                      <span className="font-black text-gray-900 uppercase text-sm tracking-tight">Cash on Delivery</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-primary" />
-                      <span className="text-[10px] font-black text-primary bg-white px-2 py-1 rounded-md border border-primary/10 uppercase tracking-tighter">Selected</span>
-                    </div>
-                  </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="customer_phone" className="text-sm">Phone</Label>
+                  <Input
+                    id="customer_phone"
+                    name="customer_phone"
+                    required
+                    autoComplete="tel"
+                    inputMode="tel"
+                    placeholder="01XXXXXXXXX"
+                    className="h-11"
+                    value={formData.customer_phone}
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
 
-              <div className="p-8 bg-gray-50/50 border-t">
-                <Button 
-                  type="submit" 
-                  disabled={submitting || calculating} 
-                  className="w-full h-16 text-xl font-black rounded-2xl shadow-xl shadow-primary/20 transition-all hover:scale-[1.01] active:scale-[0.99] group"
-                  suppressHydrationWarning
-                >
-                  {submitting ? (
-                    <><Loader2 className="mr-3 h-6 w-6 animate-spin" /> PLACING ORDER...</>
-                  ) : (
-                    "CONFIRM ORDER NOW"
-                  )}
-                </Button>
-                <div className="flex items-center justify-center gap-2 mt-4">
-                  <ShieldCheck className="w-3 h-3 text-gray-400" />
-                  <p className="text-[9px] text-gray-400 uppercase tracking-widest font-black">
-                    Your personal data is encrypted and secure
-                  </p>
+              <RadioGroup
+                defaultValue="inside"
+                className="grid grid-cols-2 gap-2"
+                onValueChange={handleLocationChange}
+              >
+                <Label htmlFor="inside" className={cn(
+                  "flex h-11 cursor-pointer items-center justify-center rounded-md border text-sm",
+                  formData.is_inside_dhaka ? "border-black bg-black text-white" : "border-gray-200"
+                )}>
+                  <RadioGroupItem value="inside" id="inside" className="sr-only" />
+                  Inside Dhaka
+                </Label>
+                <Label htmlFor="outside" className={cn(
+                  "flex h-11 cursor-pointer items-center justify-center rounded-md border text-sm",
+                  !formData.is_inside_dhaka ? "border-black bg-black text-white" : "border-gray-200"
+                )}>
+                  <RadioGroupItem value="outside" id="outside" className="sr-only" />
+                  Outside Dhaka
+                </Label>
+              </RadioGroup>
+
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label htmlFor="division" className="text-sm">Division</Label>
+                  <Input
+                    id="division"
+                    name="division"
+                    required
+                    placeholder="Dhaka"
+                    className="h-11"
+                    value={formData.division}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="city" className="text-sm">City</Label>
+                  <Input
+                    id="city"
+                    name="city"
+                    required
+                    placeholder="Mirpur"
+                    className="h-11"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                  />
                 </div>
               </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="detailed_address" className="text-sm">Address</Label>
+                <Input
+                  id="detailed_address"
+                  name="detailed_address"
+                  required
+                  autoComplete="street-address"
+                  placeholder="House, road, area"
+                  className="h-11"
+                  value={formData.detailed_address}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <p className="text-sm text-gray-500">Cash on delivery.</p>
+
+              <Button
+                type="submit"
+                disabled={submitting || calculating}
+                className="hidden h-11 w-full rounded-md text-sm font-semibold lg:inline-flex"
+              >
+                {submitting ? "Placing order…" : `Place order · Tk ${payable.toLocaleString()}`}
+              </Button>
             </form>
           </div>
 
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white rounded-2xl border shadow-sm p-6 space-y-6 sticky top-24">
-              <h3 className="text-lg font-black flex items-center justify-between uppercase tracking-tight text-gray-900">
-                <div className="flex items-center gap-2">
-                  <ShoppingBag className="w-5 h-5 text-primary" />
-                  Bag Summary
-                </div>
-                {calculating && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
-              </h3>
+          <div className="lg:col-span-5">
+            <div className="space-y-4 lg:sticky lg:top-24 lg:rounded-xl lg:border lg:p-5">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-medium">Your order</h2>
+                {calculating && <Loader2 className="h-4 w-4 animate-spin text-gray-400" />}
+              </div>
 
-              <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-3">
                 {items.map((item) => (
-                  <div key={item.variant_id} className="flex gap-4 items-center group">
-                    <div className="relative w-14 h-14 flex-shrink-0 bg-gray-50 border rounded-xl p-1.5 transition-colors group-hover:border-primary/20">
-                      <Image src={item.image} alt={item.name} fill className="object-contain" />
+                  <div key={item.variant_id} className="flex items-center gap-3">
+                    <div className="relative h-14 w-12 flex-shrink-0 overflow-hidden rounded-md bg-gray-100">
+                      <Image src={item.image} alt="" fill className="object-cover" />
                     </div>
-                    <div className="flex-grow text-left">
-                      <h4 className="text-xs font-bold text-gray-900 line-clamp-1 leading-tight mb-1">{item.name}</h4>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded uppercase">Qty: {item.quantity}</span>
-                        <span className="text-[10px] font-bold text-primary">Tk {item.price.toLocaleString()}</span>
-                      </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm">{item.name}</p>
+                      <p className="text-xs text-gray-500">{item.variant_name} · {item.quantity}</p>
                     </div>
-                    <div className="text-xs font-black text-gray-900">
-                      Tk {(item.price * item.quantity).toLocaleString()}
-                    </div>
+                    <p className="text-sm">Tk {(item.price * item.quantity).toLocaleString()}</p>
                   </div>
                 ))}
               </div>
 
-              <Separator className="opacity-50" />
-
-              <div className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex justify-between text-xs font-medium">
-                    <span className="text-gray-500">Original Product Total</span>
-                    <span className="text-gray-900 font-black">
-                      Tk {calculation ? parseFloat(calculation.total_amount_before_discount).toLocaleString() : totalPrice.toLocaleString()}
-                    </span>
-                  </div>
-                  
-                  {calculation && parseFloat(calculation.coupon_discount_amount) > 0 && (
-                    <div className="flex justify-between text-xs text-green-600 font-black">
-                      <span className="flex items-center gap-1.5">
-                        <BadgePercent className="w-3.5 h-3.5" />
-                        Coupon Discount
-                      </span>
-                      <span>- Tk {parseFloat(calculation.coupon_discount_amount).toLocaleString()}</span>
-                    </div>
-                  )}
-
-                  <div className="flex justify-between text-xs font-medium">
-                    <span className="text-gray-500">VAT Amount</span>
-                    <span className="text-gray-900 font-black">
-                      Tk {calculation ? parseFloat(calculation.vat_amount).toLocaleString() : '0.00'}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between text-xs font-medium">
-                    <span className="text-gray-500">Tax Amount</span>
-                    <span className="text-gray-900 font-black">
-                      Tk {calculation ? parseFloat(calculation.tax_amount).toLocaleString() : '0.00'}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between text-xs font-medium">
-                    <span className="text-gray-500">Delivery Charge</span>
-                    <span className={cn("font-black", calculation ? "text-gray-900" : "text-gray-400 italic")}>
-                      Tk {calculation ? parseFloat(calculation.delivery_charge).toLocaleString() : (formData.is_inside_dhaka ? '60.00' : '120.00')}
-                    </span>
-                  </div>
+              <div className="space-y-2 border-t pt-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Subtotal</span>
+                  <span>Tk {subtotal.toLocaleString()}</span>
                 </div>
-
-                <div className="bg-primary/5 p-4 rounded-2xl border-2 border-primary/10 transition-colors">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-black text-primary uppercase tracking-tight">Final Total</span>
-                    <div className="text-right">
-                      <span className="text-2xl font-black text-primary block leading-none">
-                        Tk {calculation ? parseFloat(calculation.total_amount).toLocaleString() : (totalPrice + (formData.is_inside_dhaka ? 60 : 120)).toLocaleString()}
-                      </span>
-                      <span className="text-[9px] font-bold text-primary/60 uppercase tracking-tighter">VAT & Taxes Included</span>
-                    </div>
+                {couponOff > 0 && (
+                  <div className="flex justify-between text-gray-900">
+                    <span>Coupon{calculation?.coupon_code ? ` ${calculation.coupon_code}` : ""}</span>
+                    <span>− Tk {couponOff.toLocaleString()}</span>
                   </div>
+                )}
+                {taxTotal > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Tax</span>
+                    <span>Tk {taxTotal.toLocaleString()}</span>
+                  </div>
+                )}
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Delivery</span>
+                  <span>Tk {delivery.toLocaleString()}</span>
+                </div>
+                <div className="flex items-baseline justify-between border-t pt-3">
+                  <span className="font-medium">Total</span>
+                  <span className="text-lg font-semibold">Tk {payable.toLocaleString()}</span>
                 </div>
               </div>
 
-              <div className="pt-2">
-                <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 space-y-4">
-                  <div className="space-y-3">
-                    <Label className="text-[10px] font-black uppercase text-gray-500 tracking-wider">Coupon Code (Optional)</Label>
-                    <div className="flex gap-2">
-                      <Input 
-                        placeholder="e.g. SAVE20" 
-                        className="h-11 text-xs uppercase font-black bg-white rounded-xl border-gray-200" 
-                        name="coupon_code"
-                        value={formData.coupon_code}
-                        onChange={handleInputChange}
-                        suppressHydrationWarning
-                      />
-                      <Button 
-                        type="button"
-                        variant="secondary" 
-                        className="h-11 px-5 font-black text-xs rounded-xl"
-                        onClick={() => fetchCalculatedPrice(true)}
-                        disabled={calculating}
-                        suppressHydrationWarning
-                      >
-                        {calculating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "APPLY"}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="p-6 bg-white border border-dashed border-gray-300 rounded-2xl flex items-center gap-4 group">
-              <div className="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center shadow-sm border border-green-100 flex-shrink-0 transition-transform group-hover:scale-110">
-                <ShieldCheck className="w-6 h-6 text-green-600" />
-              </div>
-              <div className="text-left">
-                <h5 className="text-[11px] font-black text-gray-900 uppercase tracking-tight">Premium Buyer Protection</h5>
-                <p className="text-[10px] text-gray-500 font-medium">Your order is protected from payment to delivery. Guaranteed authentic products.</p>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Coupon"
+                  className="h-11 uppercase"
+                  name="coupon_code"
+                  value={formData.coupon_code}
+                  onChange={handleInputChange}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-11 px-4"
+                  onClick={() => fetchCalculatedPrice(true)}
+                  disabled={calculating || !formData.coupon_code.trim()}
+                >
+                  Apply
+                </Button>
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t bg-white p-3 lg:hidden">
+          <Button
+            type="submit"
+            form="checkout-form"
+            disabled={submitting || calculating}
+            className="h-11 w-full rounded-md text-sm font-semibold"
+          >
+            {submitting ? "Placing order…" : `Place order · Tk ${payable.toLocaleString()}`}
+          </Button>
         </div>
       </main>
       <Footer />

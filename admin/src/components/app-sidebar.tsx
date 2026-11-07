@@ -6,7 +6,6 @@ import {
   Package, 
   ShoppingCart, 
   LogOut, 
-  ShoppingBag,
   ChevronRight,
   Database,
   Layers,
@@ -96,12 +95,10 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" className="border-r">
       <SidebarHeader className="py-4 px-3">
         <div className="flex items-center gap-3">
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <ShoppingBag className="size-5" />
-          </div>
+          <img src="/brand/mark-black.png" alt="" className="size-9 object-contain" />
           {!isCollapsed && (
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">CommerceHub</span>
+              <span className="truncate font-semibold">Ruchi Wear</span>
               <span className="truncate text-xs text-muted-foreground">Admin Panel</span>
             </div>
           )}

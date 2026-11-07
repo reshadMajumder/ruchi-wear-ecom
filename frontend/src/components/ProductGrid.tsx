@@ -11,27 +11,17 @@ interface ProductGridProps {
 
 export function ProductGrid({ title, products }: ProductGridProps) {
   return (
-    <section className="py-8">
+    <section className="py-6">
       <div className="container mx-auto px-4 lg:px-12 xl:px-24">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-xl md:text-2xl font-bold text-foreground">
-              {title}
-            </h2>
-            <div className="h-1 w-12 bg-accent rounded-full"></div>
-          </div>
-        </div>
-        
+        <h2 className="mb-3 text-lg font-semibold text-gray-950">{title}</h2>
         {products.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          <div className="grid grid-cols-2 gap-x-3 gap-y-5 lg:grid-cols-4">
             {products.map((product) => (
               <DetailedProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (
-          <div className="py-20 text-center bg-white border border-gray-100 rounded-lg">
-            <p className="text-muted-foreground">No products found at the moment.</p>
-          </div>
+          <p className="py-16 text-center text-sm text-gray-500">No matches.</p>
         )}
       </div>
     </section>

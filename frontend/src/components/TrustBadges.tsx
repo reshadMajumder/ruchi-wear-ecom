@@ -1,45 +1,32 @@
 'use client';
 
 import React from 'react';
-import { Truck, ShieldCheck, CreditCard, Headphones } from 'lucide-react';
+import { Truck, ShieldCheck, Headphones } from 'lucide-react';
 
 export function TrustBadges() {
   const badges = [
     {
-      icon: <Truck className="h-8 w-8 text-muted-foreground" />,
-      title: "Cancellation & Returns",
-      description: "If products not matched"
+      icon: <Truck className="h-4 w-4" />,
+      title: "1–3 days in Dhaka",
     },
     {
-      icon: <ShieldCheck className="h-8 w-8 text-muted-foreground" />,
-      title: "Privacy Policy",
-      description: "Check before dealing"
+      icon: <ShieldCheck className="h-4 w-4" />,
+      title: "7-day returns",
     },
     {
-      icon: <CreditCard className="h-8 w-8 text-muted-foreground" />,
-      title: "EMI Policy",
-      description: "We provide 0% EMI facilities*"
-    },
-    {
-      icon: <Headphones className="h-8 w-8 text-muted-foreground" />,
-      title: "Customer Support",
-      description: "WhatsApp us at +880 1887-473720"
+      icon: <Headphones className="h-4 w-4" />,
+      title: "WhatsApp support",
     }
   ];
 
   return (
-    <div className="container mx-auto px-4 lg:px-12 xl:px-24 py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 bg-white border border-border rounded-lg p-6">
-        {badges.map((badge, index) => (
-          <div key={index} className="flex items-center gap-4">
-            <div className="flex-shrink-0">
-              {badge.icon}
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-foreground">{badge.title}</h4>
-              <p className="text-xs text-muted-foreground">{badge.description}</p>
-            </div>
-          </div>
+    <div className="container mx-auto px-4 py-4 lg:px-12 xl:px-24">
+      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t pt-4 text-sm text-gray-600">
+        {badges.map((badge) => (
+          <span key={badge.title} className="inline-flex items-center gap-2">
+            {badge.icon}
+            {badge.title}
+          </span>
         ))}
       </div>
     </div>

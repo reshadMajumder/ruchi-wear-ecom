@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { CategorySection } from '@/components/CategorySection';
 import { HeroSection } from '@/components/HeroSection';
@@ -21,8 +22,9 @@ interface ApiSection {
   products: any[];
 }
 
-export default function Home() {
-  const [searchQuery, setSearchQuery] = useState('');
+function HomePage() {
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get('search') ?? '';
   const [products, setProducts] = useState<Product[]>([]);
   const [sections, setSections] = useState<ApiSection[]>([]);
   const [loading, setLoading] = useState(false);
@@ -98,10 +100,6 @@ export default function Home() {
     }
   }, [nextCursor, fetchProducts]);
 
-  const onSearch = useCallback((query: string) => {
-    setSearchQuery(query);
-  }, []);
-
   const renderedSections = useMemo(() => {
     return sections.map((section) => (
       <DynamicProductSection key={section.id} section={section} />
@@ -110,10 +108,10 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header onSearch={onSearch} />
+      <Header />
 
       <main className="flex-grow" role="main">
-        <h1 className="sr-only">AdurysGallery - Best Online Shopping for Electronics, Fashion and Home</h1>
+        <h1 className="sr-only">Ruchi Wear — clothing that reflects your taste</h1>
 
         {!searchQuery && <CategorySection />}
 
@@ -186,10 +184,8 @@ export default function Home() {
           )}
           
           {!searchQuery && (
-            <aside aria-label="Additional Information">
-              <div className="mt-12">
-                <TrustBadges />
-              </div>
+            <aside aria-label="Delivery and support">
+              <TrustBadges />
             </aside>
           )}
         </div>
@@ -197,5 +193,13 @@ export default function Home() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={null}>
+      <HomePage />
+    </Suspense>
   );
 }

@@ -19,25 +19,29 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 mb-12">
           {/* Company Info - Span 2 columns on smallest screens for readability */}
           <section className="col-span-2 lg:col-span-1 flex flex-col gap-6">
-            <Link href="/" aria-label="AdurysGallery Home">
-              <div className="flex items-center">
-                {/*
-                <h2 className="text-2xl font-bold tracking-tight text-primary">
-                  Adurys<span className="text-accent">Gallery</span>
-                </h2>
-                */}
+            <Link href="/" aria-label="Ruchi Wear home" className="flex w-fit items-center gap-3">
+              <Image
+                src="/brand/mark-black.png"
+                alt=""
+                width={64}
+                height={72}
+                className="h-16 w-auto object-contain"
+              />
+              <span className="flex flex-col items-start leading-none">
                 <Image
-                  src="https://res.cloudinary.com/dy2wrwdwp/image/upload/v1777815207/ad-logo-b_olawip.png"
-                  alt="AdurysGallery"
-                  width={160}
-                  height={48}
-                  priority
-                  className="h-12 w-auto object-contain"
+                  src="/brand/wordmark.png"
+                  alt="Ruchi Wear"
+                  width={168}
+                  height={36}
+                  className="h-7 w-auto object-contain"
                 />
-              </div>
+                <span className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#1890F8]">
+                  Reflection of Taste
+                </span>
+              </span>
             </Link>
             <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
-              Experience the future of shopping with AdurysGallery. We bring you the best selection of electronics, fashion, and home products with unbeatable quality and service.
+              Ruchi Wear is a reflection of taste. We bring you clothing chosen for quality, fit, and the way it feels to wear.
             </p>
             <nav className="flex gap-4" aria-label="Social Media Links">
               <SocialIcon
@@ -54,7 +58,6 @@ export function Footer() {
             <ul className="flex flex-col gap-4">
               <FooterLink href="/about" label="About Us" />
               <FooterLink href="/contact" label="Contact Us" />
-              <FooterLink href="/favorites" label="Wishlist" />
             </ul>
           </nav>
 
@@ -98,7 +101,7 @@ export function Footer() {
 
         <div className="border-t pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {year ?? '...'} AdurysGallery. All rights reserved.
+            © {year ?? '...'} Ruchi Wear. All rights reserved.
           </p>
           <div className="flex gap-4" aria-label="Supported Payment Methods">
             <PaymentIcon src="https://placehold.co/40x25?text=VISA" alt="Visa" />

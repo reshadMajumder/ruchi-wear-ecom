@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Search, Heart, ShoppingCart, Menu, ChevronRight, LayoutGrid, Tag } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { Search, ShoppingCart, Menu, ChevronRight, LayoutGrid, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCart } from '@/context/CartContext';
-import { useFavorites } from '@/context/FavoritesContext';
+import { cn } from '@/lib/utils';
 import {
   Sheet,
   SheetContent,
@@ -30,15 +31,15 @@ interface ApiSection {
   title: string;
 }
 
-interface HeaderProps {
-  onSearch?: (term: string) => void;
-}
-
-export function Header({ onSearch }: HeaderProps) {
+export function Header() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchAreaRef = useRef<HTMLDivElement>(null);
   const { totalItems } = useCart();
-  const { totalFavorites } = useFavorites();
+  const router = useRouter();
+  const pathname = usePathname();
   
   const [categories, setCategories] = useState<ApiCategory[]>([]);
   const [sections, setSections] = useState<ApiSection[]>([]);
@@ -62,73 +63,97 @@ export function Header({ onSearch }: HeaderProps) {
     fetchData();
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (searchOpen) searchInputRef.current?.focus();
+  }, [searchOpen]);
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    const onPointerDown = (event: MouseEvent) => {
+      if (!searchAreaRef.current?.contains(event.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSearchOpen(false);
+    };
+    document.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [searchOpen]);
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (onSearch) onSearch(searchTerm);
+    const formValue = new FormData(e.currentTarget).get('q');
+    const term = String(formValue ?? searchTerm).trim();
+    setSearchTerm(term);
+    const target = term ? `/?search=${encodeURIComponent(term)}` : '/';
+    if (pathname === '/') router.replace(target, { scroll: false });
+    else router.push(target);
   };
 
   return (
-    <header className="w-full bg-[#005a9c] text-white shadow-md z-40 sticky top-0">
+    <header className="w-full bg-black text-white shadow-md z-40 sticky top-0">
       <div className="container mx-auto px-4 lg:px-12 xl:px-24">
         {/* Top Header Row */}
-        <div className="flex items-center justify-between gap-4 h-16">
+        <div className="flex items-center justify-between gap-4 py-2">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <div className="flex items-center">
-              {/*
-              <h1 className="text-2xl md:text-3xl font-black tracking-tighter italic">
-                Adurys<span className="text-white">.com</span>
-              </h1>
-              */}
+          <Link href="/" className="flex flex-shrink-0 items-center gap-2" aria-label="Ruchi Wear home">
+            <Image
+              src="/brand/mark-white.png"
+              alt=""
+              width={52}
+              height={58}
+              priority
+              className="h-11 w-auto object-contain"
+            />
+            <span className={cn("flex-col items-start leading-none", searchOpen ? "hidden sm:flex" : "flex")}>
               <Image
-                src="https://res.cloudinary.com/dy2wrwdwp/image/upload/v1777814890/ad-logo-w_t2m4il.png"
-                alt="Adurys Gallery"
-                width={140}
-                height={40}
+                src="/brand/wordmark-white.png"
+                alt="Ruchi Wear"
+                width={132}
+                height={28}
                 priority
-                className="h-10 w-auto object-contain"
+                className="h-[22px] w-auto object-contain"
               />
-            </div>
+              <span className="mt-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-[#1890F8]">
+                Reflection of Taste
+              </span>
+            </span>
           </Link>
 
-          {/* Desktop Search Bar (Hidden on mobile) */}
-          <form 
-            onSubmit={handleSearch}
-            className="hidden md:flex flex-grow max-w-2xl relative mx-4"
-          >
-            <Input
-              type="text"
-              placeholder="Search products..."
-              className="w-full pl-4 pr-12 h-11 text-foreground rounded-md focus-visible:ring-offset-0"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              suppressHydrationWarning
-            />
-            <Button 
-              type="submit"
-              size="icon" 
-              variant="ghost"
-              className="absolute right-0 top-0 h-11 w-11 text-gray-400 hover:text-primary"
-              suppressHydrationWarning
+          <div ref={searchAreaRef} className="ml-auto flex min-w-0 flex-1 items-center justify-end gap-1 sm:gap-2">
+            {searchOpen && (
+              <form onSubmit={handleSearch} className="min-w-0 flex-1 sm:max-w-xl">
+                <Input
+                  ref={searchInputRef}
+                  name="q"
+                  type="search"
+                  placeholder="Search products..."
+                  aria-label="Search products"
+                  className="h-10 w-full bg-white text-foreground rounded-md focus-visible:ring-offset-0"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  suppressHydrationWarning
+                />
+              </form>
+            )}
+            <button
+              type="button"
+              onClick={() => setSearchOpen((open) => !open)}
+              className="p-2 hover:bg-white/10 rounded-full transition-colors"
+              aria-label={searchOpen ? "Close search" : "Search"}
+              aria-expanded={searchOpen}
             >
-              <Search className="h-5 w-5" />
-            </Button>
-          </form>
-
-          {/* Icons */}
-          <div className="flex items-center gap-1 sm:gap-2">
-            <Link href="/favorites" className="relative p-2 hover:bg-white/10 rounded-full transition-colors" title="Favorites">
-              <Heart className="h-6 w-6" />
-              {mounted && totalFavorites > 0 && (
-                <span className="absolute top-1 right-0 bg-red-500 text-white border border-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full">
-                  {totalFavorites}
-                </span>
-              )}
-            </Link>
+              <Search className="h-6 w-6" />
+            </button>
             <Link href="/cart" className="relative p-2 hover:bg-white/10 rounded-full transition-colors" title="Shopping Cart">
               <ShoppingCart className="h-6 w-6" />
               {mounted && totalItems > 0 && (
-                <span className="absolute top-1 right-0 bg-accent text-white border border-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full">
+                <span className="absolute top-1 right-0 bg-[#1890F8] text-white border border-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full">
                   {totalItems}
                 </span>
               )}
@@ -147,7 +172,7 @@ export function Header({ onSearch }: HeaderProps) {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] p-0 border-none bg-white">
-                <SheetHeader className="p-6 bg-[#005a9c] text-white space-y-0">
+                <SheetHeader className="p-6 bg-black text-white space-y-0">
                   <SheetTitle className="text-white text-left font-black flex items-center gap-2">
                     <LayoutGrid className="w-5 h-5" />
                     NAVIGATION
@@ -215,21 +240,6 @@ export function Header({ onSearch }: HeaderProps) {
             </Sheet>
           </div>
         </div>
-      </div>
-
-      {/* Mobile Search Bar */}
-      <div className="md:hidden container mx-auto px-4">
-        <form onSubmit={handleSearch} className="relative pb-3">
-          <Input
-            type="text"
-            placeholder="Search here..."
-            className="w-full pl-10 pr-4 h-11 text-foreground bg-white rounded-md border-none focus-visible:ring-0"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            suppressHydrationWarning
-          />
-          <Search className="absolute left-3 top-1/2 -translate-y-[calc(50%+6px)] h-5 w-5 text-gray-400" />
-        </form>
       </div>
     </header>
   );

@@ -2,28 +2,27 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
-import { FavoritesProvider } from '@/context/FavoritesContext';
 import { Toaster } from '@/components/ui/toaster';
 import { WhatsAppBubble } from '@/components/WhatsAppBubble';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://adurysgallery.com';
 
 export const viewport: Viewport = {
-  themeColor: '#005a9c',
+  themeColor: '#000000',
   width: 'device-width',
   initialScale: 1,
 };
 
 export const metadata: Metadata = {
   title: {
-    default: 'AdurysGallery | Your Ultimate Shopping Destination',
-    template: '%s | AdurysGallery'
+    default: 'Ruchi Wear | Reflection of Taste',
+    template: '%s | Ruchi Wear'
   },
-  description: 'Shop the latest electronics, fashion, and home goods at AdurysGallery. Experience premium quality, fast delivery, and 24/7 support.',
-  keywords: ['ecommerce', 'online shopping', 'electronics', 'fashion', 'home goods', 'AdurysGallery'],
-  authors: [{ name: 'AdurysGallery Team' }],
-  creator: 'AdurysGallery',
-  publisher: 'AdurysGallery',
+  description: 'Shop clothing at Ruchi Wear. A reflection of taste, with quality pieces, reliable delivery, and support when you need it.',
+  keywords: ['Ruchi Wear', 'clothing', 'fashion', 'apparel', 'online shopping', 'reflection of taste'],
+  authors: [{ name: 'Ruchi Wear' }],
+  creator: 'Ruchi Wear',
+  publisher: 'Ruchi Wear',
   formatDetection: {
     email: false,
     address: false,
@@ -34,16 +33,16 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: 'AdurysGallery | Your Ultimate Shopping Destination',
-    description: 'Shop the latest electronics, fashion, and home goods with unbeatable quality and service.',
+    title: 'Ruchi Wear | Reflection of Taste',
+    description: 'Shop clothing at Ruchi Wear. Quality pieces, chosen with taste.',
     url: SITE_URL,
-    siteName: 'AdurysGallery',
+    siteName: 'Ruchi Wear',
     images: [
       {
-        url: 'https://picsum.photos/seed/seo/1200/630',
+        url: '/brand/og.png',
         width: 1200,
         height: 630,
-        alt: 'AdurysGallery Shopping Experience',
+        alt: 'Ruchi Wear',
       },
     ],
     locale: 'en_US',
@@ -51,9 +50,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AdurysGallery | Your Ultimate Shopping Destination',
-    description: 'Shop the latest electronics, fashion, and home goods at AdurysGallery.',
-    images: ['https://picsum.photos/seed/seo/1200/630'],
+    title: 'Ruchi Wear | Reflection of Taste',
+    description: 'Shop clothing at Ruchi Wear. Quality pieces, chosen with taste.',
+    images: ['/brand/og.png'],
   },
   robots: {
     index: true,
@@ -88,7 +87,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "name": "AdurysGallery",
+              "name": "Ruchi Wear",
               "url": SITE_URL,
               "potentialAction": {
                 "@type": "SearchAction",
@@ -103,13 +102,11 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <AnalyticsTracker />
         </Suspense>
-        <FavoritesProvider>
-          <CartProvider>
-            {children}
-            <Toaster />
-            <WhatsAppBubble />
-          </CartProvider>
-        </FavoritesProvider>
+        <CartProvider>
+          {children}
+          <Toaster />
+          <WhatsAppBubble />
+        </CartProvider>
       </body>
     </html>
   );

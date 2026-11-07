@@ -33,21 +33,15 @@ export function DynamicProductSection({ section }: DynamicProductSectionProps) {
   }));
 
   return (
-    <section className="py-8 bg-white border-b last:border-b-0">
+    <section className="border-b bg-white py-6 last:border-b-0">
       <div className="container mx-auto px-4 lg:px-12 xl:px-24">
-        {/* Section Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-xl md:text-2xl font-bold text-foreground">{section.title}</h2>
-            <div className="h-1 w-12 bg-accent rounded-full"></div>
-          </div>
-          <Link href={`/sections/${section.id}`} className="text-sm font-semibold text-primary hover:text-accent transition-colors flex items-center gap-1 group">
-            See More <span className="text-lg group-hover:translate-x-1 transition-transform">→</span>
+        <div className="mb-3 flex items-baseline justify-between">
+          <h2 className="text-lg font-semibold text-gray-950">{section.title}</h2>
+          <Link href={`/sections/${section.id}`} className="text-sm text-gray-500 hover:text-gray-950">
+            See all
           </Link>
         </div>
-
-        {/* Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-5 lg:grid-cols-4">
           {mappedProducts.map((product) => (
             <DetailedProductCard key={product.id} product={product} />
           ))}

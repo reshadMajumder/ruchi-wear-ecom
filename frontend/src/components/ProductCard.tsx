@@ -5,7 +5,6 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/data/mockData';
-import { Heart } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 interface ProductCardProps {
@@ -54,19 +53,6 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
       </Link>
-
-      {/* Wishlist Icon Overlay - Keep it clickable separately */}
-      <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-2 group-hover:translate-x-0">
-        <IconButton icon={<Heart className="h-4 w-4" />} />
-      </div>
     </div>
-  );
-}
-
-function IconButton({ icon }: { icon: React.ReactNode }) {
-  return (
-    <button className="h-9 w-9 bg-white text-foreground rounded-full flex items-center justify-center shadow-md hover:bg-primary hover:text-white transition-all duration-200">
-      {icon}
-    </button>
   );
 }

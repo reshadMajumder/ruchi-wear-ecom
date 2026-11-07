@@ -4,7 +4,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Star, ShoppingCart, Heart, Scale } from 'lucide-react';
+import { Star, ShoppingCart, Scale } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { HOT_DEALS_LARGE, HOT_DEALS_SMALL, Product } from '@/data/mockData';
 import {
@@ -108,9 +108,6 @@ function LargeProductCard({ product }: { product: Product }) {
               BUY NOW
             </Button>
             <div className="flex items-center gap-2">
-              <button className="h-10 w-10 flex items-center justify-center rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors group/heart">
-                <Heart className="h-5 w-5 group-hover/heart:text-red-500 transition-colors" />
-              </button>
               <button className="h-10 w-10 flex items-center justify-center rounded-full border border-border hover:bg-muted text-muted-foreground transition-colors">
                 <Scale className="h-5 w-5" />
               </button>

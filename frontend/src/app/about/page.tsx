@@ -15,21 +15,21 @@ export default function AboutPage() {
         <section className="relative overflow-hidden border-b border-white/60 bg-white/70 backdrop-blur-sm">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute -top-24 right-[-4rem] h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
-            <div className="absolute -bottom-28 left-[-6rem] h-80 w-80 rounded-full bg-amber-200/40 blur-3xl" />
+            <div className="absolute -bottom-28 left-[-6rem] h-80 w-80 rounded-full bg-[#1890F8]/15 blur-3xl" />
           </div>
           <div className="container mx-auto px-4 py-16 md:py-24 max-w-6xl relative z-10">
             <div className="max-w-3xl space-y-6">
               <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white px-4 py-2 text-[11px] font-black uppercase tracking-[0.25em] text-primary shadow-sm">
                 <Sparkles className="h-3.5 w-3.5" />
-                About AdurysGallery
+                About Ruchi Wear
               </div>
               <h1 className="text-4xl md:text-6xl font-black text-gray-950 leading-[0.95] tracking-tight">
-                A cleaner way to shop,
-                <span className="block text-primary">built around trust.</span>
+                Clothing with a point of view,
+                <span className="block text-primary">chosen with care.</span>
               </h1>
               <p className="text-lg md:text-xl text-gray-600 leading-relaxed max-w-3xl">
-                AdurysGallery curates products with a focus on quality, accessibility, and dependable service.
-                We keep the experience simple, the selection intentional, and the support easy to reach.
+                Ruchi Wear is a reflection of taste. We curate clothing for quality, fit, and dependable service,
+                and we keep the experience simple from the first look to the order.
               </p>
               <div className="flex flex-wrap gap-3 pt-2">
                 <Link href="/contact" className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5">

@@ -235,7 +235,7 @@ CACHES = {
             'SOCKET_TIMEOUT': 5,
             'COMPRESSOR': 'django_redis.compressors.zlib.ZlibCompressor',
         },
-        'KEY_PREFIX': os.getenv('CACHE_KEY_PREFIX', 'adurys'),
+        'KEY_PREFIX': os.getenv('CACHE_KEY_PREFIX', 'ruchiwear'),
         'TIMEOUT': None,  # Cache entries never expire by default
     }
 }

@@ -20,7 +20,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="animate-pulse text-primary font-medium">Initializing CommerceHub...</div>
+      <div className="animate-pulse text-primary font-medium">Opening Ruchi Wear...</div>
     </div>
   );
 }
