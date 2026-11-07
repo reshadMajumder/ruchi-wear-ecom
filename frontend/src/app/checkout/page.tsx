@@ -267,7 +267,7 @@ export default function CheckoutPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen flex flex-col bg-white">
+      <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-grow flex items-center justify-center">
           <Loader2 className="w-10 h-10 animate-spin text-primary" />
@@ -278,7 +278,7 @@ export default function CheckoutPage() {
   }
 
   if (orderStatement) return (
-    <div className="min-h-screen flex flex-col bg-white print:bg-white">
+    <div className="min-h-screen flex flex-col print:bg-white">
       <div className="print:hidden"><Header /></div>
       <main className="flex-grow container mx-auto px-4 lg:px-12 xl:px-24 py-12 flex flex-col items-center">
         <div className="mb-6 text-center print:hidden">
@@ -423,7 +423,7 @@ export default function CheckoutPage() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow container mx-auto px-4 lg:px-12 xl:px-24 py-8">
         <h1 className="mb-4 text-xl font-semibold">Checkout</h1>

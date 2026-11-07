@@ -5,14 +5,6 @@ import { useParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { DetailedProductCard } from '@/components/DetailedProductCard';
-import { Separator } from '@/components/ui/separator';
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { ChevronRight, Filter, Loader2, Tag } from 'lucide-react';
 import { BASE_URL } from '@/lib/constants';
 import { Product } from '@/data/mockData';
@@ -121,26 +113,25 @@ export default function CategoryPage() {
     : categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1).replace(/-/g, ' ');
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f5f5f5]">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      
-      <main className="flex-grow container mx-auto px-4 lg:px-12 xl:px-24 py-6">
-        <nav className="flex items-center gap-2 text-[13px] text-gray-500 mb-6">
-          <button onClick={() => router.push('/')} className="hover:text-primary transition-colors">Home</button>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-gray-900 font-medium">{displayTitle}</span>
+      <main className="mx-auto w-full max-w-[1440px] flex-grow px-4 py-6 lg:px-10">
+        <nav className="mb-4 flex items-center gap-2 text-xs uppercase tracking-wide text-gray-500">
+          <button onClick={() => router.push('/')}>Home</button>
+          <ChevronRight className="h-3 w-3" />
+          <span className="text-gray-950">{displayTitle}</span>
         </nav>
+        <h1 className="mb-6 font-headline text-4xl uppercase tracking-tight">Products</h1>
 
         <div className="flex gap-6 relative">
           <aside className={`
-            lg:w-[240px] flex-shrink-0 bg-white border border-gray-200 p-5 hidden lg:block h-fit rounded-lg shadow-sm
-            ${showFilters ? 'block absolute top-0 left-0 z-50 w-full' : 'hidden'}
+            lg:block lg:w-[220px] flex-shrink-0 h-fit
+            ${showFilters ? 'absolute left-0 top-0 z-50 block w-full bg-[#f6f5f2] p-4' : 'hidden'}
           `}>
+            <h2 className="mb-4 text-sm font-semibold">Filters</h2>
             {categorySlug !== 'all' && subcategories.length > 0 && (
               <div className="mb-8">
-                <h3 className="font-black text-[11px] uppercase tracking-widest text-gray-400 mb-4 pb-2 border-b border-gray-100">
-                  Subcategories
-                </h3>
+                <h3 className="mb-2 text-xs uppercase tracking-wide text-gray-500">Category</h3>
                 <div className="max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
                   <ul className="space-y-1">
                     {subcategories.map((sub) => (
@@ -160,9 +151,7 @@ export default function CategoryPage() {
             )}
 
             <div className="space-y-4">
-              <h3 className="font-black text-[11px] uppercase tracking-widest text-gray-400 mb-4 pb-2 border-b border-gray-100">
-                Quick Filters
-              </h3>
+              <h3 className="mb-2 text-xs uppercase tracking-wide text-gray-500">Availability</h3>
               <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => setDiscountedOnly(!discountedOnly)}>
                 <Checkbox id="discounted" checked={discountedOnly} onCheckedChange={(val) => setDiscountedOnly(!!val)} />
                 <label htmlFor="discounted" className="text-[13px] font-bold text-gray-600 group-hover:text-primary cursor-pointer flex items-center gap-2">
@@ -174,42 +163,32 @@ export default function CategoryPage() {
           </aside>
 
           <div className="flex-grow pb-20">
-            <div className="bg-white border border-gray-200 p-4 mb-6 flex flex-wrap items-center justify-between gap-4 rounded-lg shadow-sm">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-black uppercase tracking-tight text-gray-500">Sort by</span>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-[170px] h-10 text-[13px] font-bold rounded-md">
-                      <SelectValue placeholder="New Arrivals" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="new">New Arrivals</SelectItem>
-                      <SelectItem value="price_low_to_high">Price: Low to High</SelectItem>
-                      <SelectItem value="price_high_to_low">Price: High to Low</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <button 
-                  className="lg:hidden flex items-center gap-2 text-sm font-bold text-gray-600 border px-4 py-2 rounded-md hover:bg-gray-50"
-                  onClick={() => setShowFilters(!showFilters)}
+            <div className="mb-6 flex flex-wrap items-center gap-2">
+              {[
+                ['new', 'New'],
+                ['price_low_to_high', 'Price ↑'],
+                ['price_high_to_low', 'Price ↓'],
+              ].map(([value, label]) => (
+                <button
+                  key={value}
+                  onClick={() => setSortBy(value)}
+                  className={`h-9 px-3 text-xs uppercase tracking-wide ${sortBy === value ? 'bg-black text-white' : 'bg-[#eceae6]'}`}
                 >
-                  <Filter className="w-4 h-4" /> Filters
+                  {label}
                 </button>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-black uppercase tracking-tight text-gray-500">Show</span>
-                <Select defaultValue="40">
-                  <SelectTrigger className="w-[80px] h-10 text-[13px] font-bold rounded-md">
-                    <SelectValue placeholder="40" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="20">20</SelectItem>
-                    <SelectItem value="40">40</SelectItem>
-                    <SelectItem value="60">60</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              ))}
+              <button
+                onClick={() => setDiscountedOnly((value) => !value)}
+                className={`h-9 px-3 text-xs uppercase tracking-wide ${discountedOnly ? 'bg-black text-white' : 'bg-[#eceae6]'}`}
+              >
+                Sale
+              </button>
+              <button
+                className="flex h-9 items-center gap-2 px-3 text-xs uppercase tracking-wide lg:hidden"
+                onClick={() => setShowFilters(!showFilters)}
+              >
+                <Filter className="h-3.5 w-3.5" /> Filters
+              </button>
             </div>
 
             {loading && !loadingMore ? (

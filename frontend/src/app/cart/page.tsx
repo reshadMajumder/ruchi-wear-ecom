@@ -20,7 +20,7 @@ export default function CartPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen flex flex-col bg-white">
+      <div className="min-h-screen flex flex-col bg-transparent">
         <Header />
         <main className="flex-grow flex items-center justify-center">
           <Loader2 className="w-10 h-10 animate-spin text-primary" />
@@ -31,7 +31,7 @@ export default function CartPage() {
   }
 
   return (
-      <div className="min-h-screen flex flex-col bg-white">
+      <div className="min-h-screen flex flex-col bg-transparent">
       <Header />
       <main className="container mx-auto flex-grow px-4 py-6 lg:px-12 xl:px-24">
         <h1 className="mb-4 text-xl font-semibold">Cart</h1>

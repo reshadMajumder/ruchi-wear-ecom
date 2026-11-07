@@ -21,7 +21,7 @@ export function TrustBadges() {
 
   return (
     <div className="container mx-auto px-4 py-4 lg:px-12 xl:px-24">
-      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t pt-4 text-sm text-gray-600">
+      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-black/10 pt-4 text-sm text-gray-600">
         {badges.map((badge) => (
           <span key={badge.title} className="inline-flex items-center gap-2">
             {badge.icon}

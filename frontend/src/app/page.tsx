@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/Header';
-import { CategorySection } from '@/components/CategorySection';
-import { HeroSection } from '@/components/HeroSection';
+import { CollectionHero } from '@/components/CollectionHero';
 import { TrustBadges } from '@/components/TrustBadges';
 import { DynamicProductSection } from '@/components/DynamicProductSection';
 import { ProductGrid } from '@/components/ProductGrid';
@@ -65,7 +64,7 @@ function HomePage() {
         price: p.price_data.final_price,
         originalPrice: p.price_data.original_price,
         image: p.primary_image || 'https://placehold.co/400x400?text=No+Image',
-        category: 'Product',
+        category: '',
         rating: p.rating || 0,
         reviews: p.reviews || 0,
         discountAmount: p.price_data.discount_value,
@@ -100,12 +99,6 @@ function HomePage() {
     }
   }, [nextCursor, fetchProducts]);
 
-  const renderedSections = useMemo(() => {
-    return sections.map((section) => (
-      <DynamicProductSection key={section.id} section={section} />
-    ));
-  }, [sections]);
-
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -113,12 +106,20 @@ function HomePage() {
       <main className="flex-grow" role="main">
         <h1 className="sr-only">Ruchi Wear — clothing that reflects your taste</h1>
 
-        {!searchQuery && <CategorySection />}
+        {!searchQuery && !sectionsLoading && sections[0] && (
+          <CollectionHero
+            title={sections[0].title}
+            sectionId={sections[0].id}
+            products={sections[0].products.slice(0, 6).map((product: any) => ({
+              slug: product.slug,
+              name: product.name,
+              image: product.primary_image || '',
+            }))}
+          />
+        )}
 
         {!searchQuery && (
           <>
-            <HeroSection />
-            
             {sectionsLoading ? (
               <div className="container mx-auto px-4 lg:px-12 xl:px-24 py-8 space-y-12">
                 {[...Array(2)].map((_, i) => (
@@ -137,7 +138,9 @@ function HomePage() {
               </div>
             ) : (
               <section aria-label="Featured Product Sections">
-                {renderedSections}
+                {sections.map((section, index) => (
+                  <DynamicProductSection key={section.id} section={section} showTitle={index !== 0} />
+                ))}
               </section>
             )}
           </>

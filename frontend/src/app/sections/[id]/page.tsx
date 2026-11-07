@@ -5,15 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { DetailedProductCard } from '@/components/DetailedProductCard';
-import { Separator } from '@/components/ui/separator';
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { ChevronRight, Loader2, Filter, Tag } from 'lucide-react';
+import { ChevronRight, Loader2, Tag } from 'lucide-react';
 import { BASE_URL } from '@/lib/constants';
 import { Product } from '@/data/mockData';
 import { Button } from '@/components/ui/button';
@@ -61,7 +53,7 @@ export default function SectionProductsPage() {
         price: parseFloat(p.price_data.final_price),
         originalPrice: parseFloat(p.price_data.original_price),
         image: p.primary_image || 'https://placehold.co/400x400?text=No+Image',
-        category: 'Section',
+        category: '',
         rating: p.rating || 0,
         reviews: p.reviews || 0,
         discountAmount: p.price_data.discount_value,
@@ -106,35 +98,21 @@ export default function SectionProductsPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f5f5f5]">
+    <div className="flex min-h-screen flex-col">
       <Header />
-      
-      <main className="flex-grow container mx-auto px-4 lg:px-12 xl:px-24 py-6">
-        <nav className="flex items-center gap-2 text-[13px] text-gray-500 mb-6">
-          <button onClick={() => router.push('/')} className="hover:text-primary transition-colors">Home</button>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-gray-900 font-medium">Sections</span>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-gray-900 font-medium">{sectionTitle}</span>
+      <main className="mx-auto w-full max-w-[1440px] flex-grow px-4 py-6 lg:px-10">
+        <nav className="mb-4 flex items-center gap-2 text-xs uppercase tracking-wide text-gray-500">
+          <button onClick={() => router.push('/')}>Home</button>
+          <ChevronRight className="h-3 w-3" />
+          <span className="text-gray-950">{sectionTitle}</span>
         </nav>
+        <h1 className="mb-6 font-headline text-4xl uppercase tracking-tight">{sectionTitle}</h1>
 
-        <div className="flex gap-6 relative">
-          <aside className="lg:w-[240px] flex-shrink-0 bg-white border border-gray-200 p-5 hidden lg:block h-fit rounded-lg shadow-sm">
-            <div className="mb-8">
-              <h3 className="font-black text-[11px] uppercase tracking-widest text-gray-400 mb-4 pb-2 border-b border-gray-100">
-                Browse
-              </h3>
-              <ul className="space-y-3">
-                <li className="text-[13px] font-black text-primary border-l-2 border-primary pl-3">All in {sectionTitle}</li>
-                <li className="text-[13px] font-bold text-gray-600 hover:text-primary cursor-pointer pl-3 transition-colors">New Arrivals</li>
-                <li className="text-[13px] font-bold text-gray-600 hover:text-primary cursor-pointer pl-3 transition-colors">Best Sellers</li>
-              </ul>
-            </div>
-
+        <div className="flex gap-8 relative">
+          <aside className="hidden h-fit w-[200px] flex-shrink-0 lg:block">
+            <h2 className="mb-4 text-sm font-semibold">Filters</h2>
             <div className="space-y-4">
-              <h3 className="font-black text-[11px] uppercase tracking-widest text-gray-400 mb-4 pb-2 border-b border-gray-100">
-                Quick Filters
-              </h3>
+              <h3 className="mb-2 text-xs uppercase tracking-wide text-gray-500">Availability</h3>
               <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => setDiscountedOnly(!discountedOnly)}>
                 <Checkbox id="discounted-sec" checked={discountedOnly} onCheckedChange={(val) => setDiscountedOnly(!!val)} />
                 <label htmlFor="discounted-sec" className="text-[13px] font-bold text-gray-600 group-hover:text-primary cursor-pointer flex items-center gap-2">
@@ -146,26 +124,27 @@ export default function SectionProductsPage() {
           </aside>
 
           <div className="flex-grow pb-20">
-            <div className="bg-white border border-gray-200 p-4 mb-6 flex flex-wrap items-center justify-between gap-4 rounded-lg shadow-sm">
-              <div className="flex items-center gap-4">
-                <h1 className="text-xl font-black text-gray-900 uppercase tracking-tight">{sectionTitle}</h1>
-                <Separator orientation="vertical" className="h-6" />
-                <span className="text-[11px] text-gray-400 font-black uppercase tracking-widest">{products.length} Products Shown</span>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-black uppercase tracking-tight text-gray-500">Sort by</span>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-[170px] h-10 text-[13px] font-bold rounded-md">
-                    <SelectValue placeholder="New Arrivals" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="new">New Arrivals</SelectItem>
-                    <SelectItem value="price_low_to_high">Price: Low to High</SelectItem>
-                    <SelectItem value="price_high_to_low">Price: High to Low</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="mb-6 flex flex-wrap items-center gap-2">
+              {[
+                ['new', 'New'],
+                ['price_low_to_high', 'Price ↑'],
+                ['price_high_to_low', 'Price ↓'],
+              ].map(([value, label]) => (
+                <button
+                  key={value}
+                  onClick={() => setSortBy(value)}
+                  className={`h-9 px-3 text-xs uppercase tracking-wide ${sortBy === value ? 'bg-black text-white' : 'bg-[#eceae6]'}`}
+                >
+                  {label}
+                </button>
+              ))}
+              <button
+                onClick={() => setDiscountedOnly((value) => !value)}
+                className={`h-9 px-3 text-xs uppercase tracking-wide ${discountedOnly ? 'bg-black text-white' : 'bg-[#eceae6]'}`}
+              >
+                Sale
+              </button>
+              <span className="ml-auto text-xs text-gray-500">{products.length} pieces</span>
             </div>
 
             {loading && !loadingMore ? (

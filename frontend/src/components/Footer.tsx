@@ -13,7 +13,7 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="bg-white border-t pt-16 pb-8">
+    <footer className="border-t border-black/10 pt-12 pb-8">
       <div className="container mx-auto px-4 lg:px-12 xl:px-24">
         {/* Responsive Grid: 2 columns on mobile/tablet, 4 on desktop */}
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 mb-12">

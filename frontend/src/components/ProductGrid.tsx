@@ -11,11 +11,11 @@ interface ProductGridProps {
 
 export function ProductGrid({ title, products }: ProductGridProps) {
   return (
-    <section className="py-6">
-      <div className="container mx-auto px-4 lg:px-12 xl:px-24">
-        <h2 className="mb-3 text-lg font-semibold text-gray-950">{title}</h2>
+    <section className="py-8">
+      <div className="mx-auto max-w-[1440px] px-4 lg:px-10">
+        <h2 className="mb-5 font-headline text-3xl uppercase tracking-tight">{title}</h2>
         {products.length > 0 ? (
-          <div className="grid grid-cols-2 gap-x-3 gap-y-5 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">
             {products.map((product) => (
               <DetailedProductCard key={product.id} product={product} />
             ))}

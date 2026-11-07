@@ -113,7 +113,7 @@ export default function ProductDetailsPage() {
               price: parseFloat(p.price_data?.final_price || '0'),
               originalPrice: parseFloat(p.price_data?.original_price || '0'),
               image: p.primary_image || 'https://placehold.co/400x400?text=No+Image',
-              category: 'Related',
+              category: '',
               rating: p.rating || 0,
               reviews: p.reviews || 0,
               discountAmount: p.price_data?.discount_value,
@@ -191,7 +191,7 @@ export default function ProductDetailsPage() {
   const canAdd = Boolean(currentVariant) && stock > 0;
 
   if (loading) return (
-    <div className="min-h-screen flex flex-col bg-white"><Header />
+    <div className="min-h-screen flex flex-col"><Header />
       <main className="flex-grow container mx-auto px-4 lg:px-12 xl:px-24 py-6"><Skeleton className="h-[480px] w-full rounded-xl" /></main>
     <Footer /></div>
   );
@@ -208,7 +208,7 @@ export default function ProductDetailsPage() {
   const off = product.price_data.is_discounted ? Math.round(product.price_data.discount_percent) : 0;
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-grow pb-28 md:pb-10">
         <div className="container mx-auto px-4 lg:px-12 xl:px-24 py-4">
@@ -249,7 +249,7 @@ export default function ProductDetailsPage() {
                   {product.price_data.is_discounted && (
                     <>
                       <span className="text-sm text-gray-400 line-through">Tk {product.price_data.original_price.toLocaleString()}</span>
-                      {off > 0 && <span className="text-sm font-medium text-[#1890F8]">−{off}%</span>}
+                      {off > 0 && <span className="text-sm font-medium">−{off}%</span>}
                     </>
                   )}
                 </div>

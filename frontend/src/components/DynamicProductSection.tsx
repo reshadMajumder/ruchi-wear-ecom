@@ -11,9 +11,10 @@ interface DynamicProductSectionProps {
     title: string;
     products: any[];
   };
+  showTitle?: boolean;
 }
 
-export function DynamicProductSection({ section }: DynamicProductSectionProps) {
+export function DynamicProductSection({ section, showTitle = true }: DynamicProductSectionProps) {
   if (!section.products || section.products.length === 0) return null;
 
   const mappedProducts: Product[] = section.products.map((p: any) => ({
@@ -22,7 +23,7 @@ export function DynamicProductSection({ section }: DynamicProductSectionProps) {
     price: parseFloat(p.price_data.final_price),
     originalPrice: parseFloat(p.price_data.original_price),
     image: p.primary_image || 'https://placehold.co/400x400?text=No+Image',
-    category: section.title,
+    category: p.category_name || p.product_type || '',
     rating: p.rating || 0,
     reviews: p.reviews || 0,
     discountAmount: p.price_data.discount_value,
@@ -33,15 +34,17 @@ export function DynamicProductSection({ section }: DynamicProductSectionProps) {
   }));
 
   return (
-    <section className="border-b bg-white py-6 last:border-b-0">
-      <div className="container mx-auto px-4 lg:px-12 xl:px-24">
-        <div className="mb-3 flex items-baseline justify-between">
-          <h2 className="text-lg font-semibold text-gray-950">{section.title}</h2>
-          <Link href={`/sections/${section.id}`} className="text-sm text-gray-500 hover:text-gray-950">
-            See all
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-5 lg:grid-cols-4">
+    <section className="py-8">
+      <div className="mx-auto max-w-[1440px] px-4 lg:px-10">
+        {showTitle && (
+          <div className="mb-5 flex items-baseline justify-between">
+            <h2 className="font-headline text-3xl uppercase tracking-tight">{section.title}</h2>
+            <Link href={`/sections/${section.id}`} className="text-sm text-gray-500 hover:text-gray-950">
+              See all
+            </Link>
+          </div>
+        )}
+        <div className="grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">
           {mappedProducts.map((product) => (
             <DetailedProductCard key={product.id} product={product} />
           ))}
