@@ -38,7 +38,7 @@ export function DynamicProductSection({ section, showTitle = true }: DynamicProd
       <div className="mx-auto max-w-[1440px] px-4 lg:px-10">
         {showTitle && (
           <div className="mb-5 flex items-baseline justify-between">
-            <h2 className="font-headline text-3xl uppercase tracking-tight">{section.title}</h2>
+            <h2 className="font-headline text-4xl uppercase leading-none md:text-5xl">{section.title}</h2>
             <Link href={`/sections/${section.id}`} className="text-sm text-gray-500 hover:text-gray-950">
               See all
             </Link>

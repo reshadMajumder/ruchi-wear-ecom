@@ -17,10 +17,10 @@ RUN python -m pip install --upgrade pip \
 
 COPY . /app/
 
-RUN chown -R app:app /app
-
-USER app
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh && chown -R app:app /app
 
 EXPOSE 8000
 
+ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput --clear && gunicorn core.wsgi:application --bind 0.0.0.0:8000 --workers ${GUNICORN_WORKERS} --timeout ${GUNICORN_TIMEOUT} --access-logfile - --error-logfile - --forwarded-allow-ips='*'"]

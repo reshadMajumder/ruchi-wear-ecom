@@ -59,10 +59,8 @@ const sectionItems = [
 ];
 
 const discountItems = [
-  { title: 'Discount List', icon: ListOrdered, href: '/dashboard/discounts' },
-  { title: 'Create Discount', icon: PlusCircle, href: '/dashboard/discounts/create' },
-  { title: 'Assign Discount', icon: Link2, href: '/dashboard/discounts/assign' },
   { title: 'Discount Cards', icon: CreditCard, href: '/dashboard/discounts/cards' },
+  { title: 'Assign Discount', icon: Link2, href: '/dashboard/discounts/assign' },
 ];
 
 const couponItems = [
@@ -113,12 +111,12 @@ export function AppSidebar() {
                 isActive={pathname === item.href}
                 tooltip={item.title}
                 className={cn(
-                  "h-10 transition-all duration-200",
+                  "h-8 transition-all duration-200",
                   pathname === item.href ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium" : "hover:bg-sidebar-accent/50"
                 )}
               >
                 <Link href={item.href}>
-                  <item.icon className="size-5" />
+                  <item.icon className="size-4" />
                   <span>{item.title}</span>
                 </Link>
               </SidebarMenuButton>
@@ -129,8 +127,8 @@ export function AppSidebar() {
           <Collapsible asChild defaultOpen={pathname.includes('/sections')} className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip="Sections" className="h-10">
-                  <LayoutGrid className="size-5" />
+                <SidebarMenuButton tooltip="Sections" className="h-8">
+                  <LayoutGrid className="size-4" />
                   <span>Sections</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
@@ -156,8 +154,8 @@ export function AppSidebar() {
           <Collapsible asChild defaultOpen={pathname.includes('/discounts')} className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip="Discounts" className="h-10">
-                  <Percent className="size-5" />
+                <SidebarMenuButton tooltip="Discounts" className="h-8">
+                  <Percent className="size-4" />
                   <span>Discounts</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
@@ -183,8 +181,8 @@ export function AppSidebar() {
           <Collapsible asChild defaultOpen={pathname.includes('/coupons')} className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip="Coupons" className="h-10">
-                  <Ticket className="size-5" />
+                <SidebarMenuButton tooltip="Coupons" className="h-8">
+                  <Ticket className="size-4" />
                   <span>Coupons</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
@@ -210,8 +208,8 @@ export function AppSidebar() {
           <Collapsible asChild defaultOpen={pathname.includes('/foundation')} className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip="Foundation" className="h-10">
-                  <Database className="size-5" />
+                <SidebarMenuButton tooltip="Foundation" className="h-8">
+                  <Database className="size-4" />
                   <span>Foundation</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
@@ -236,8 +234,8 @@ export function AppSidebar() {
           <Collapsible asChild defaultOpen={pathname.includes('/policies') || pathname.includes('/faqs')} className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip="Legal & Support" className="h-10">
-                  <ShieldCheck className="size-5" />
+                <SidebarMenuButton tooltip="Legal & Support" className="h-8">
+                  <ShieldCheck className="size-4" />
                   <span>Legal & Support</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
@@ -263,8 +261,8 @@ export function AppSidebar() {
           <Collapsible asChild defaultOpen={pathname.includes('/settings')} className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
-                <SidebarMenuButton tooltip="Settings" className="h-10">
-                  <Settings className="size-5" />
+                <SidebarMenuButton tooltip="Settings" className="h-8">
+                  <Settings className="size-4" />
                   <span>Settings</span>
                   <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </SidebarMenuButton>
@@ -296,7 +294,7 @@ export function AppSidebar() {
           )}
           onClick={logout}
         >
-          <LogOut className="size-5" />
+          <LogOut className="size-4" />
           {!isCollapsed && <span className="font-medium">Logout</span>}
         </Button>
       </SidebarFooter>

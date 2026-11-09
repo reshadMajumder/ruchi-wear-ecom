@@ -274,7 +274,7 @@ export default function CategoriesPage() {
             <Layers className="w-8 h-8 text-primary" />
           </div>
           <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Taxonomy Registry</h1>
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">Taxonomy Registry</h1>
             <p className="text-muted-foreground font-medium">Manage hierarchical product groupings and visual assets.</p>
           </div>
         </div>

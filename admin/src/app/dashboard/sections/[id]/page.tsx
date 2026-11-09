@@ -177,7 +177,7 @@ export default function SectionDetailPage({ params }: { params: Promise<{ id: st
               Back to Sections
             </Button>
           </Link>
-          <h1 className="text-4xl font-black tracking-tight text-slate-900">
+          <h1 className="text-xl font-semibold tracking-tight text-slate-900">
             {section?.title || 'Section Intelligence'}
           </h1>
           <p className="text-muted-foreground font-medium">Manage curation metadata and high-fidelity product mappings.</p>

@@ -144,7 +144,7 @@ export default function DeliverySettingsPage() {
             <div className="p-3 bg-primary/10 rounded-2xl">
               <Truck className="w-8 h-8 text-primary" />
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">Regional Configurations</h1>
+            <h1 className="text-xl font-semibold tracking-tight text-slate-900">Regional Configurations</h1>
           </div>
           <p className="text-muted-foreground font-medium">Manage delivery charges, VAT, and tax parameters for the Bangladesh market.</p>
         </div>

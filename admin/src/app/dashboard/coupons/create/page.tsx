@@ -150,7 +150,7 @@ export default function CreateCouponPage() {
               Back to Registry
             </Button>
           </Link>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">Define Coupon Logic</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-slate-900">Define Coupon Logic</h1>
           <p className="text-muted-foreground font-medium">Create targeted incentives and global promotional triggers.</p>
         </div>
         <Button 

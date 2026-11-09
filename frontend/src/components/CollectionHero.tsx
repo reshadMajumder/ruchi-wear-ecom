@@ -1,17 +1,9 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { ArrowRight, ChevronLeft, ChevronRight, Search } from 'lucide-react';
-import { BASE_URL } from '@/lib/constants';
-
-interface ApiCategory {
-  id: number;
-  name: string;
-  slug: string;
-}
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface FeaturedProduct {
   slug: string;
@@ -26,17 +18,7 @@ interface CollectionHeroProps {
 }
 
 export function CollectionHero({ title, sectionId, products }: CollectionHeroProps) {
-  const router = useRouter();
-  const [categories, setCategories] = useState<ApiCategory[]>([]);
-  const [query, setQuery] = useState('');
   const [start, setStart] = useState(0);
-
-  useEffect(() => {
-    fetch(`${BASE_URL}/api/foundation/categories/`)
-      .then((res) => (res.ok ? res.json() : []))
-      .then((data) => setCategories(Array.isArray(data) ? data.slice(0, 6) : []))
-      .catch(() => {});
-  }, []);
 
   const slides = products.filter((product) => product.image);
   const visible = slides.length
@@ -45,36 +27,15 @@ export function CollectionHero({ title, sectionId, products }: CollectionHeroPro
       )
     : [];
 
-  const search = (event: React.FormEvent) => {
-    event.preventDefault();
-    const term = query.trim();
-    router.push(term ? `/?search=${encodeURIComponent(term)}` : '/categories/all');
-  };
-
   return (
-    <section className="mx-auto grid max-w-[1440px] gap-8 px-4 py-6 lg:grid-cols-[240px_1fr] lg:px-10 lg:py-8">
+    <section className="mx-auto grid max-w-[1440px] items-end gap-8 px-4 py-8 lg:grid-cols-[minmax(300px,0.9fr)_1.1fr] lg:px-10">
       <div>
-        <div className="mb-6 flex flex-col gap-1 text-sm uppercase tracking-[0.14em] text-gray-800">
-          {categories.map((category) => (
-            <Link key={category.id} href={`/categories/${category.slug}`} className="w-fit hover:opacity-60">
-              {category.name}
-            </Link>
+        <h2 className="font-headline text-[clamp(4.25rem,7vw,6.75rem)] uppercase leading-[0.78] text-gray-950">
+          {title.trim().split(/\s+/).map((word, index) => (
+            <span key={`${word}-${index}`} className="block">{word}</span>
           ))}
-        </div>
-        <form onSubmit={search} className="mb-8 flex h-11 items-center gap-2 bg-[#eceae6] px-3">
-          <Search className="h-4 w-4 text-gray-500" />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search"
-            aria-label="Search products"
-            className="w-full bg-transparent text-sm outline-none"
-          />
-        </form>
-        <h2 className="font-headline text-5xl font-semibold uppercase leading-[0.9] tracking-tight text-gray-950 md:text-6xl">
-          {title}
         </h2>
-        <p className="mt-3 text-sm text-gray-600">Reflection of Taste</p>
+        <p className="mt-4 text-lg leading-tight text-gray-900">Reflection of Taste</p>
         <div className="mt-8 flex items-center gap-3">
           <Link href={`/sections/${sectionId}`} className="inline-flex h-11 items-center gap-3 bg-[#e4e2de] px-4 text-sm">
             Go to shop
@@ -94,7 +55,7 @@ export function CollectionHero({ title, sectionId, products }: CollectionHeroPro
       </div>
       <div className="grid grid-cols-2 gap-3 md:gap-4">
         {visible.map((product) => (
-          <Link key={product.slug} href={`/products/${product.slug}`} className="relative aspect-[4/5] overflow-hidden bg-white">
+          <Link key={product.slug} href={`/products/${product.slug}`} className="relative aspect-[3/2] overflow-hidden bg-[#eceae6] lg:aspect-[4/5]">
             <Image src={product.image} alt={product.name} fill sizes="(max-width: 768px) 45vw, 480px" className="object-cover" />
           </Link>
         ))}

@@ -101,7 +101,7 @@ export default function AnalyticsPage() {
     <div className="space-y-8 p-6 max-w-[1600px] mx-auto">
       {/* Header */}
       <div className="flex flex-col gap-2">
-        <h1 className="text-4xl font-black tracking-tight text-slate-900">Advanced Analytics</h1>
+        <h1 className="text-xl font-semibold tracking-tight text-slate-900">Advanced Analytics</h1>
         <p className="text-slate-500 font-medium">Real-time insights and business performance metrics.</p>
       </div>
 

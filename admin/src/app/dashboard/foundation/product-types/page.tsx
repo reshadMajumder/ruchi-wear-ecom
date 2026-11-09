@@ -195,7 +195,7 @@ export default function ProductTypesPage() {
             <Settings2 className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">Product Types</h1>
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">Product Types</h1>
             <p className="text-muted-foreground">Define logical groups for your product variants and attributes.</p>
           </div>
         </div>

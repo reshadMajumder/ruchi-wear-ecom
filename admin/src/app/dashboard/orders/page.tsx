@@ -148,7 +148,7 @@ export default function OrdersPage() {
             <ShoppingCart className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Fulfillment Registry</h1>
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">Fulfillment Registry</h1>
             <p className="text-muted-foreground font-medium">Monitor and manage global transaction lifecycle.</p>
           </div>
         </div>

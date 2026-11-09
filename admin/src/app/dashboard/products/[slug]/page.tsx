@@ -69,6 +69,8 @@ interface ProductImage {
 interface AttributeValue {
   attribute: string;
   value: string;
+  attribute_id?: number;
+  attribute_value_id?: number;
 }
 
 interface ProductVariant {
@@ -142,6 +144,12 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
     attributes: {} as Record<number, number> // attributeId -> valueId
   });
   const [isCreatingVariant, setIsCreatingVariant] = useState(false);
+  const [isEditVariantOpen, setIsEditVariantOpen] = useState(false);
+  const [editPrice, setEditPrice] = useState('');
+  const [editAttributes, setEditAttributes] = useState<Record<number, number>>({});
+  const [isSavingVariant, setIsSavingVariant] = useState(false);
+  const [variantToDisable, setVariantToDisable] = useState<ProductVariant | null>(null);
+  const [isDisabling, setIsDisabling] = useState(false);
 
   const fetchProductDetails = useCallback(async () => {
     setIsLoading(true);
@@ -329,6 +337,93 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
     }
   };
 
+  const openEditVariant = async (variant: ProductVariant) => {
+    setSelectedVariant(variant);
+    setEditPrice(product?.selling_price || '');
+    setIsEditVariantOpen(true);
+    let attributes = availableAttributes;
+    if (attributes.length === 0 && product) {
+      try {
+        const token = localStorage.getItem('commercehub_access_token');
+        const response = await fetch(API_ENDPOINTS.getProductTypeAttributes(product.product_type_id.toString()), {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          attributes = data.attributes || [];
+          setAvailableAttributes(attributes);
+        }
+      } catch {
+        attributes = [];
+      }
+    }
+    const selected: Record<number, number> = {};
+    variant.attributes?.forEach((attr) => {
+      if (attr.attribute_id && attr.attribute_value_id) {
+        selected[attr.attribute_id] = attr.attribute_value_id;
+      }
+    });
+    setEditAttributes(selected);
+  };
+
+  const handleSaveVariant = async () => {
+    if (!selectedVariant) return;
+    const selectedValueIds = Object.values(editAttributes).filter((id) => id);
+    if (availableAttributes.length === 0) {
+      toast({ variant: 'destructive', title: 'Options unavailable', description: 'Reload the product and try again.' });
+      return;
+    }
+    if (selectedValueIds.length !== availableAttributes.length) {
+      toast({ variant: 'destructive', title: 'Choose every option', description: 'Each attribute needs a value.' });
+      return;
+    }
+    setIsSavingVariant(true);
+    try {
+      const token = localStorage.getItem('commercehub_access_token');
+      const response = await fetch(API_ENDPOINTS.VARIANT_UPDATE(selectedVariant.id), {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          base_price: editPrice,
+          attributes: selectedValueIds
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to update variant.');
+      toast({ title: 'Variant updated', description: selectedVariant.sku });
+      setIsEditVariantOpen(false);
+      fetchProductDetails();
+    } catch (err: any) {
+      toast({ variant: 'destructive', title: 'Update failed', description: err.message });
+    } finally {
+      setIsSavingVariant(false);
+    }
+  };
+
+  const handleDisableVariant = async () => {
+    if (!variantToDisable) return;
+    setIsDisabling(true);
+    try {
+      const token = localStorage.getItem('commercehub_access_token');
+      const response = await fetch(API_ENDPOINTS.VARIANT_DELETE(variantToDisable.id), {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Failed to disable variant.');
+      toast({ title: 'Variant disabled', description: `${variantToDisable.sku} stock is now 0.` });
+      setVariantToDisable(null);
+      fetchProductDetails();
+    } catch (err: any) {
+      toast({ variant: 'destructive', title: 'Disable failed', description: err.message });
+    } finally {
+      setIsDisabling(false);
+    }
+  };
+
   useEffect(() => {
     if (isAddVariantDialogOpen && availableAttributes.length === 0) {
       fetchProductTypeAttributes();
@@ -435,7 +530,7 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
           <div className="space-y-8">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold text-slate-900 tracking-tight leading-tight">
+                <h1 className="text-xl font-semibold text-slate-900 tracking-tight leading-tight">
                   {product.name}
                 </h1>
                 {product.is_active === false && (
@@ -531,6 +626,22 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
                               }}
                             >
                               <Plus className="w-3.5 h-3.5" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 px-2 text-[11px]"
+                              onClick={() => openEditVariant(variant)}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 px-2 text-[11px] text-destructive"
+                              onClick={() => setVariantToDisable(variant)}
+                            >
+                              Disable
                             </Button>
                           </div>
                         </TableCell>
@@ -669,6 +780,60 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ slug:
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <Dialog open={isEditVariantOpen} onOpenChange={setIsEditVariantOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit {selectedVariant?.sku}</DialogTitle>
+            <DialogDescription>Price applies to the product. Options apply to this variant.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <label className="text-xs text-muted-foreground">Selling price</label>
+              <Input type="number" value={editPrice} onChange={(e) => setEditPrice(e.target.value)} />
+            </div>
+            {availableAttributes.map((attr) => (
+              <div key={attr.id} className="space-y-1">
+                <label className="text-xs text-muted-foreground">{attr.name}</label>
+                <Select
+                  value={editAttributes[attr.id] ? String(editAttributes[attr.id]) : undefined}
+                  onValueChange={(value) => setEditAttributes((current) => ({ ...current, [attr.id]: Number(value) }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={attr.name} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {attr.values.map((option) => (
+                      <SelectItem key={option.id} value={String(option.id)}>{option.value}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ))}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditVariantOpen(false)}>Cancel</Button>
+            <Button onClick={handleSaveVariant} disabled={isSavingVariant}>
+              {isSavingVariant ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <AlertDialog open={!!variantToDisable} onOpenChange={(open) => !open && setVariantToDisable(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Disable {variantToDisable?.sku}?</AlertDialogTitle>
+            <AlertDialogDescription>This sets the variant stock to 0. It stays on the product.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Keep</AlertDialogCancel>
+            <AlertDialogAction onClick={(e) => { e.preventDefault(); handleDisableVariant(); }} disabled={isDisabling}>
+              {isDisabling ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Disable'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
       {/* Add Variant Dialog */}
       <Dialog open={isAddVariantDialogOpen} onOpenChange={setIsAddVariantDialogOpen}>

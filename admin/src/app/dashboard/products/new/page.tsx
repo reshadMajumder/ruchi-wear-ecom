@@ -321,7 +321,7 @@ export default function NewProductPage() {
               <ChevronLeft className="h-4 w-4" /> Back to Catalog
             </Button>
           </Link>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">Add New Product</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-slate-900">Add New Product</h1>
         </div>
         <Button form="product-form" type="submit" disabled={isSubmitting} className="gap-2 shadow-xl font-bold px-8 h-12 text-md">
           {isSubmitting ? <Loader2 className="animate-spin h-5 w-5" /> : <Save className="h-5 w-5" />}

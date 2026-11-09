@@ -2,6 +2,7 @@
 
 import { use, useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { 
@@ -76,6 +77,14 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
   const [isLoading, setIsLoading] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isCourierDialogOpen, setIsCourierDialogOpen] = useState(false);
+  const [buyer, setBuyer] = useState({
+    customer_name: '',
+    customer_phone: '',
+    division: '',
+    city: '',
+    detailed_address: '',
+  });
+  const [isSavingBuyer, setIsSavingBuyer] = useState(false);
 
   const fetchCourierStatus = useCallback(async () => {
     try {
@@ -104,6 +113,13 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
       if (!response.ok) throw new Error('Statement data unavailable.');
       const data = await response.json();
       setOrder(data);
+      setBuyer({
+        customer_name: data.customer_name || '',
+        customer_phone: data.customer_phone || '',
+        division: data.division || '',
+        city: data.city || '',
+        detailed_address: data.detailed_address || '',
+      });
       
       // Also fetch courier status
       fetchCourierStatus();
@@ -159,6 +175,30 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
       });
     } finally {
       setIsTransitioning(false);
+    }
+  };
+
+  const handleSaveBuyer = async () => {
+    if (!order) return;
+    setIsSavingBuyer(true);
+    try {
+      const token = localStorage.getItem('commercehub_access_token');
+      const response = await fetch(API_ENDPOINTS.UPDATE_ORDER(order.order_id), {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(buyer),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Could not update the order.');
+      toast({ title: 'Order updated', description: order.public_order_id });
+      fetchOrderDetails();
+    } catch (err: any) {
+      toast({ variant: 'destructive', title: 'Update failed', description: err.message });
+    } finally {
+      setIsSavingBuyer(false);
     }
   };
 
@@ -255,6 +295,27 @@ export default function OrderDetailsPage({ params }: { params: Promise<{ id: str
             </div>
           </div>
         </div>
+
+        {order.status === 'pending' && (
+          <form
+            className="print:hidden px-8 md:px-12 pb-8 grid grid-cols-1 sm:grid-cols-2 gap-2"
+            onSubmit={(event) => {
+              event.preventDefault();
+              handleSaveBuyer();
+            }}
+          >
+            <Input value={buyer.customer_name} onChange={(e) => setBuyer({ ...buyer, customer_name: e.target.value })} placeholder="Name" aria-label="Customer name" />
+            <Input value={buyer.customer_phone} onChange={(e) => setBuyer({ ...buyer, customer_phone: e.target.value })} placeholder="Phone" aria-label="Phone" />
+            <Input value={buyer.division} onChange={(e) => setBuyer({ ...buyer, division: e.target.value })} placeholder="Division" aria-label="Division" />
+            <Input value={buyer.city} onChange={(e) => setBuyer({ ...buyer, city: e.target.value })} placeholder="City" aria-label="City" />
+            <Input className="sm:col-span-2" value={buyer.detailed_address} onChange={(e) => setBuyer({ ...buyer, detailed_address: e.target.value })} placeholder="Address" aria-label="Address" />
+            <div className="sm:col-span-2">
+              <Button type="submit" size="sm" disabled={isSavingBuyer}>
+                {isSavingBuyer ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Save details'}
+              </Button>
+            </div>
+          </form>
+        )}
 
         {/* Items Table */}
         <div className="px-8 md:p-12 pt-0 overflow-x-auto">

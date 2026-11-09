@@ -121,7 +121,7 @@ export default function CategoryPage() {
           <ChevronRight className="h-3 w-3" />
           <span className="text-gray-950">{displayTitle}</span>
         </nav>
-        <h1 className="mb-6 font-headline text-4xl uppercase tracking-tight">Products</h1>
+        <h1 className="mb-6 font-headline text-5xl uppercase leading-none md:text-6xl">Products</h1>
 
         <div className="flex gap-6 relative">
           <aside className={`

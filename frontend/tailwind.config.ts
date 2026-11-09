@@ -12,7 +12,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['Inter', 'sans-serif'],
-        headline: ['Oswald', 'sans-serif'],
+        headline: ['Anton', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {

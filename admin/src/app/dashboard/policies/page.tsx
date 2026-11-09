@@ -132,7 +132,7 @@ export default function PolicyManagementPage() {
             <div className="p-3 bg-primary/10 rounded-2xl">
               <ShieldCheck className="w-8 h-8 text-primary" />
             </div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">Legal Intelligence</h1>
+            <h1 className="text-xl font-semibold tracking-tight text-slate-900">Legal Intelligence</h1>
           </div>
           <p className="text-muted-foreground font-medium">Manage storefront governance documents and compliance policies.</p>
         </div>

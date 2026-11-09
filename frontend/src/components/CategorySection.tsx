@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { BASE_URL } from '@/lib/constants';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LayoutGrid } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ApiCategory {
   id: number;
@@ -42,52 +42,78 @@ export const CategorySection = React.memo(function CategorySection() {
   if (error) return null;
 
   return (
-    <section className="py-6 bg-white border-b overflow-x-auto no-scrollbar md:overflow-visible">
-      <div className="container mx-auto px-4 lg:px-12 xl:px-24">
-        <div className="flex items-start justify-start md:justify-between gap-6 md:gap-2 min-w-max md:min-w-full">
-          <Link 
-            href="/categories/all"
-            className="flex flex-col items-center gap-3 w-[80px] md:w-auto group"
-          >
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-full ring-1 ring-inset ring-gray-100 overflow-hidden bg-gray-50 relative flex items-center justify-center group-hover:ring-primary transition-all duration-300 shadow-sm group-hover:shadow-md isolate">
-              <LayoutGrid className="w-7 h-7 text-gray-400 group-hover:text-primary transition-colors" />
-            </div>
-            <span className="text-[11px] md:text-[13px] font-bold text-center text-gray-700 uppercase tracking-tight line-clamp-2 leading-tight group-hover:text-primary transition-colors">
-              View All
-            </span>
-          </Link>
+    <section aria-labelledby="home-categories" className="mx-auto max-w-[1440px] px-4 py-6 lg:px-10">
+      <h2 id="home-categories" className="mb-5 font-headline text-[clamp(4.25rem,7vw,6.75rem)] uppercase leading-[0.78] text-gray-950 md:mb-6">
+        Categories
+      </h2>
 
-          {loading ? (
-            Array.from({ length: 7 }).map((_, i) => (
-              <div key={i} className="flex flex-col items-center gap-3 w-[80px] md:w-auto">
-                <Skeleton className="w-16 h-16 md:w-20 md:h-20 rounded-full" />
-                <Skeleton className="h-3 w-14" />
+      <div className="flex flex-col gap-7 md:hidden">
+        {loading
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="grid grid-cols-[1.4fr_0.9fr] items-center gap-4">
+                <Skeleton className="aspect-[3/2]" />
+                <Skeleton className="h-12 w-3/4" />
               </div>
             ))
-          ) : (
-            categories.map((category) => (
-              <Link 
-                key={category.id} 
-                href={`/categories/${category.slug}`}
-                className="flex flex-col items-center gap-3 w-[80px] md:w-auto group"
-              >
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full ring-1 ring-inset ring-gray-100 overflow-hidden bg-white relative group-hover:ring-primary transition-all duration-300 shadow-sm group-hover:shadow-md isolate">
+          : categories.map((category, index) => {
+              const photo = (
+                <div className="relative aspect-[3/2] overflow-hidden bg-[#eceae6]">
                   <Image
-                    src={category.image_url || 'https://placehold.co/150x150?text=No+Image'}
-                    alt={category.name}
+                    src={category.image_url || 'https://placehold.co/600x800?text=No+Image'}
+                    alt=""
                     fill
-                    sizes="(max-width: 768px) 64px, 80px"
-                    className="object-cover p-1 rounded-full transition-transform duration-500 group-hover:scale-110"
-                    data-ai-hint="category thumbnail"
+                    sizes="45vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-                <span className="text-[11px] md:text-[13px] font-bold text-center text-gray-700 uppercase tracking-tight line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+              );
+              const label = (
+                <div className={index % 2 === 0 ? 'text-left' : 'text-right'}>
+                  <p className="font-headline text-[clamp(2.15rem,8vw,3.4rem)] uppercase leading-[0.78] text-gray-950">
+                    {category.name}
+                  </p>
+                </div>
+              );
+              return (
+                <Link
+                  key={category.id}
+                  href={`/categories/${category.slug}`}
+                  className={cn(
+                    "group grid items-center gap-4",
+                    index % 2 === 0 ? "grid-cols-[1.4fr_0.9fr]" : "grid-cols-[0.9fr_1.4fr]"
+                  )}
+                >
+                  {index % 2 === 0 ? photo : label}
+                  {index % 2 === 0 ? label : photo}
+                </Link>
+              );
+            })}
+      </div>
+
+      <div className="hidden snap-x snap-mandatory gap-6 overflow-x-auto no-scrollbar md:flex">
+        {loading
+          ? Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="aspect-[3/2] w-auto flex-1" />
+            ))
+          : categories.map((category) => (
+              <Link
+                key={category.id}
+                href={`/categories/${category.slug}`}
+                className="group relative aspect-[3/2] w-auto min-w-0 flex-1 shrink-0 snap-start overflow-hidden bg-[#eceae6]"
+              >
+                <Image
+                  src={category.image_url || 'https://placehold.co/600x800?text=No+Image'}
+                  alt=""
+                  fill
+                  sizes="25vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent" />
+                <span className="absolute inset-x-0 bottom-0 p-5 font-headline text-5xl uppercase leading-[0.78] text-white md:text-6xl md:leading-[0.78]">
                   {category.name}
                 </span>
               </Link>
-            ))
-          )}
-        </div>
+            ))}
       </div>
     </section>
   );

@@ -92,7 +92,7 @@ export default function DiscountsPage() {
             <Percent className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">Discounts</h1>
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">Discounts</h1>
             <p className="text-muted-foreground">Manage promotions, coupons, and seasonal offers.</p>
           </div>
         </div>

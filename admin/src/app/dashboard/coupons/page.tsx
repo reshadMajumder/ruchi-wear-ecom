@@ -244,7 +244,7 @@ export default function CouponsListPage() {
             <Ticket className="w-8 h-8 text-primary" />
           </div>
           <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground flex items-center gap-3">
+            <h1 className="text-xl font-semibold tracking-tight text-foreground flex items-center gap-3">
               Coupon Registry
               {isRefreshing && <Loader2 className="w-5 h-5 animate-spin text-slate-300" />}
             </h1>

@@ -186,6 +186,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
 SECURE_SSL_REDIRECT = not DEBUG
@@ -282,8 +285,9 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-cloudinary.config( 
-  cloud_name = os.getenv('cloud_name'), 
-  api_key = os.getenv('api_key'), 
-  api_secret = os.getenv('api_secret') 
-)
+if os.getenv('cloud_name') and os.getenv('api_key') and os.getenv('api_secret'):
+    cloudinary.config(
+        cloud_name=os.getenv('cloud_name'),
+        api_key=os.getenv('api_key'),
+        api_secret=os.getenv('api_secret'),
+    )

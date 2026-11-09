@@ -152,7 +152,7 @@ export default function CreateSectionPage() {
             Back to Registry
           </Button>
         </Link>
-        <h1 className="text-4xl font-extrabold tracking-tight text-foreground flex items-center gap-3">
+        <h1 className="text-xl font-semibold tracking-tight text-foreground flex items-center gap-3">
           <LayoutGrid className="text-primary h-10 w-10" />
           Create Storefront Section
         </h1>

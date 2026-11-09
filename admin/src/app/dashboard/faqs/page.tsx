@@ -223,7 +223,7 @@ export default function FaqManagementPage() {
             <HelpCircle className="w-8 h-8 text-primary" />
           </div>
           <div>
-            <h1 className="text-4xl font-extrabold tracking-tight text-foreground">Knowledge Base</h1>
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">Knowledge Base</h1>
             <p className="text-muted-foreground font-medium">Manage frequently asked questions and support triage.</p>
           </div>
         </div>

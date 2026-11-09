@@ -3,6 +3,8 @@
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Header } from '@/components/Header';
+import { HeroSection } from '@/components/HeroSection';
+import { CategorySection } from '@/components/CategorySection';
 import { CollectionHero } from '@/components/CollectionHero';
 import { TrustBadges } from '@/components/TrustBadges';
 import { DynamicProductSection } from '@/components/DynamicProductSection';
@@ -106,16 +108,22 @@ function HomePage() {
       <main className="flex-grow" role="main">
         <h1 className="sr-only">Ruchi Wear — clothing that reflects your taste</h1>
 
-        {!searchQuery && !sectionsLoading && sections[0] && (
-          <CollectionHero
-            title={sections[0].title}
-            sectionId={sections[0].id}
-            products={sections[0].products.slice(0, 6).map((product: any) => ({
-              slug: product.slug,
-              name: product.name,
-              image: product.primary_image || '',
-            }))}
-          />
+        {!searchQuery && (
+          <>
+            <HeroSection />
+            <CategorySection />
+            {!sectionsLoading && sections[0] && (
+              <CollectionHero
+                title={sections[0].title}
+                sectionId={sections[0].id}
+                products={sections[0].products.slice(0, 6).map((product: any) => ({
+                  slug: product.slug,
+                  name: product.name,
+                  image: product.primary_image || '',
+                }))}
+              />
+            )}
+          </>
         )}
 
         {!searchQuery && (

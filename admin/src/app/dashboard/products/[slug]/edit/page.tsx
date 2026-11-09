@@ -253,7 +253,7 @@ export default function EditProductPage({ params }: { params: Promise<{ slug: st
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         <div className="space-y-1">
           <Link href={`/dashboard/products/${slug}`}><Button variant="ghost" size="sm" className="pl-0 gap-2 hover:bg-transparent text-primary font-bold"><ChevronLeft className="h-4 w-4" /> Discard & Return</Button></Link>
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">Edit Product</h1>
+          <h1 className="text-xl font-semibold tracking-tight text-slate-900">Edit Product</h1>
         </div>
         <Button form="edit-form" type="submit" disabled={isSubmitting} className="gap-2 shadow-xl font-bold px-10 h-14 text-md">{isSubmitting ? <Loader2 className="animate-spin h-5 w-5" /> : <Save className="h-5 w-5" />} Synchronize Catalog</Button>
       </div>

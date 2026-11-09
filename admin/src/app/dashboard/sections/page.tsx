@@ -134,7 +134,7 @@ export default function SectionsListPage() {
             <LayoutGrid className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Product Sections</h1>
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">Product Sections</h1>
             <p className="text-muted-foreground">Curate groups of products for featured storefront placement.</p>
           </div>
         </div>

@@ -80,7 +80,7 @@ export default function CourierListPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-slate-900 flex items-center gap-2">
+          <h1 className="text-xl font-semibold tracking-tight text-slate-900 flex items-center gap-2">
             <Truck className="w-6 h-6 text-primary" />
             COURIER REGISTRY
           </h1>

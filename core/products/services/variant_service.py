@@ -41,6 +41,10 @@ def update_variant(variant_id, data):
     if "stock" in data:
         raise ValidationError("Stock cannot be changed directly. Use the stock increase/decrease endpoint.")
 
+    if "base_price" in data:
+        variant.product.selling_price = data["base_price"]
+        variant.product.save(update_fields=["selling_price"])
+
     if "weight" in data:
         variant.weight = data["weight"]
 

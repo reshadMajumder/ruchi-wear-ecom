@@ -68,6 +68,8 @@ services:
         condition: service_healthy
     expose:
       - "8000"
+    volumes:
+      - media_data:/app/media
     networks:
       - adurys_net
 
@@ -186,6 +188,7 @@ services:
 volumes:
   redis_data:
   postgres_data:
+  media_data:
 
 networks:
   adurys_net:

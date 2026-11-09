@@ -103,6 +103,8 @@ export const API_ENDPOINTS = {
 
   // Variant Management
   VARIANT_STOCK_UPDATE: (variantId: string | number) => `${BASE_URL}/api/varient/admin/${variantId}/stock/`,
+  VARIANT_UPDATE: (variantId: string | number) => `${BASE_URL}/api/varient/admin/${variantId}/update/`,
+  VARIANT_DELETE: (variantId: string | number) => `${BASE_URL}/api/varient/admin/${variantId}/delete/`,
   CREATE_VARIANT: (productId: string | number) => `${BASE_URL}/api/varient/admin/products/${productId}/`,
 
   // Image Upload

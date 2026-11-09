@@ -106,7 +106,7 @@ export default function SectionProductsPage() {
           <ChevronRight className="h-3 w-3" />
           <span className="text-gray-950">{sectionTitle}</span>
         </nav>
-        <h1 className="mb-6 font-headline text-4xl uppercase tracking-tight">{sectionTitle}</h1>
+        <h1 className="mb-6 font-headline text-5xl uppercase leading-none md:text-6xl">{sectionTitle}</h1>
 
         <div className="flex gap-8 relative">
           <aside className="hidden h-fit w-[200px] flex-shrink-0 lg:block">
